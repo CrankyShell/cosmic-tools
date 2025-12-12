@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" href="assets/images/logo.png" type="image/png">
+    <title>Cosmic Tools - Trading Tools Hub</title>
+    
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Global styles -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+    <!-- Tool-specific styles will be loaded dynamically -->
+</head>
+<body>
+    <!-- Cosmic background -->
+    <div class="cosmic-bg"></div>
+    
+    <!-- Navigation -->
+    <nav class="global-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1>Cosmic Tools</h1>
+                <div class="nav-subtitle">Trading Tools Hub</div>
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="tools/cosmic-journal/index.html" class="nav-link">Cosmic Journal</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <div class="nav-tool-indicator" id="current-tool">Home</div>
+            </div>
+            
+            <button class="nav-menu-btn" id="mobile-menu-btn">☰</button>
+        </div>
+    </nav>
+    
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="index.html" class="mobile-nav-link active">Home</a>
+        <a href="tools/cosmic-journal/index.html" class="mobile-nav-link">Cosmic Journal</a>
+        <a href="about.html" class="mobile-nav-link">About</a>
+        <a href="contact.html" class="mobile-nav-link">Contact</a>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="hub-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h2 class="hero-title">Cosmic Tools</h2>
+                <p class="hero-subtitle">A suite of powerful trading tools designed to elevate your trading journey</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">2+</div>
+                        <div class="stat-label">Tools</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">Free</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">Access</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tools Grid -->
+        <section class="tools-section">
+            <h3 class="section-title">Available Tools</h3>
+            
+            <div class="tools-grid">
+                <!-- Cosmic Journal Tool -->
+                <div class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #00ffb3 0%, #00cc99 100%);">
+                        📓
+                    </div>
+                    <div class="tool-content">
+                        <h4 class="tool-title">Cosmic Journal</h4>
+                        <p class="tool-description">
+                            Advanced trading journal with analytics, equity curve visualization, and performance tracking.
+                            Perfect for monitoring your trading journey.
+                        </p>
+                        <div class="tool-features">
+                            <span class="tool-feature">📊 Analytics</span>
+                            <span class="tool-feature">📈 Equity Curve</span>
+                            <span class="tool-feature">🗓️ Calendar View</span>
+                        </div>
+                        <a href="tools/cosmic-journal/index.html" class="tool-btn">
+                            Open Journal →
+                        </a>
+                    </div>
+                    <div class="tool-status">
+                        <span class="status-badge active">Active</span>
+                    </div>
+                </div>
+                
+                <!-- Cosmic Analyzer (Coming Soon) -->
+                <div class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #3b7cff 0%, #2d6aff 100%);">
+                        🔍
+                    </div>
+                    <div class="tool-content">
+                        <h4 class="tool-title">Cosmic Analyzer</h4>
+                        <p class="tool-description">
+                            Market analysis tool with pattern recognition, backtesting capabilities, and trade idea generation.
+                            Launching soon!
+                        </p>
+                        <div class="tool-features">
+                            <span class="tool-feature">📈 Pattern Recognition</span>
+                            <span class="tool-feature">🧪 Backtesting</span>
+                            <span class="tool-feature">💡 Trade Ideas</span>
+                        </div>
+                        <button class="tool-btn disabled" disabled>
+                            Coming Soon
+                        </button>
+                    </div>
+                    <div class="tool-status">
+                        <span class="status-badge soon">Coming Soon</span>
+                    </div>
+                </div>
+                
+                <!-- Risk Calculator (Coming Soon) -->
+                <div class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #9d4edd 0%, #7b2cbf 100%);">
+                        ⚖️
+                    </div>
+                    <div class="tool-content">
+                        <h4 class="tool-title">Risk Calculator</h4>
+                        <p class="tool-description">
+                            Position sizing and risk management calculator. Calculate optimal position sizes based on your
+                            account size and risk tolerance.
+                        </p>
+                        <div class="tool-features">
+                            <span class="tool-feature">📊 Position Sizing</span>
+                            <span class="tool-feature">🛡️ Risk Management</span>
+                            <span class="tool-feature">🎯 RR Calculator</span>
+                        </div>
+                        <button class="tool-btn disabled" disabled>
+                            Coming Soon
+                        </button>
+                    </div>
+                    <div class="tool-status">
+                        <span class="status-badge soon">Coming Soon</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section class="features-section">
+            <h3 class="section-title">Why Choose Cosmic Tools?</h3>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h4 class="feature-title">Performance Focused</h4>
+                    <p class="feature-description">
+                        Tools optimized for speed and efficiency. No unnecessary bloat, just what traders need.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h4 class="feature-title">Integrated Ecosystem</h4>
+                    <p class="feature-description">
+                        All tools work together seamlessly. Share data between tools for a unified trading experience.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4 class="feature-title">Mobile First</h4>
+                    <p class="feature-description">
+                        Works perfectly on all devices. Trade and analyze from anywhere, anytime.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h4 class="feature-title">Privacy First</h4>
+                    <p class="feature-description">
+                        Your data stays on your device. No cloud storage required unless you choose to.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Quick Access -->
+        <section class="quick-access-section">
+            <h3 class="section-title">Quick Access</h3>
+            
+            <div class="quick-access-grid">
+                <a href="tools/cosmic-journal/index.html#add" class="quick-access-card">
+                    <div class="quick-access-icon">➕</div>
+                    <div class="quick-access-content">
+                        <h4>Add New Trade</h4>
+                        <p>Quickly log a new trade in the journal</p>
+                    </div>
+                </a>
+                
+                <a href="tools/cosmic-journal/index.html#view" class="quick-access-card">
+                    <div class="quick-access-icon">👁️</div>
+                    <div class="quick-access-content">
+                        <h4>View Trades</h4>
+                        <p>Review and analyze your trading history</p>
+                    </div>
+                </a>
+                
+                <a href="tools/cosmic-journal/index.html#analytics" class="quick-access-card">
+                    <div class="quick-access-icon">📊</div>
+                    <div class="quick-access-content">
+                        <h4>Performance Analytics</h4>
+                        <p>Check your trading statistics and metrics</p>
+                    </div>
+                </a>
+                
+                <a href="tools/cosmic-journal/index.html#accounts" class="quick-access-card">
+                    <div class="quick-access-icon">👤</div>
+                    <div class="quick-access-content">
+                        <h4>Account Management</h4>
+                        <p>Manage your trading accounts</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="global-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>Cosmic Tools</h3>
+                <p>Trading Tools Hub</p>
+                <div class="footer-social">
+                    <a href="#" class="social-link">Twitter</a>
+                    <a href="#" class="social-link">Instagram</a>
+                    <a href="#" class="social-link">Discord</a>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Tools</h4>
+                    <a href="tools/cosmic-journal/index.html">Cosmic Journal</a>
+                    <a href="#">Cosmic Analyzer</a>
+                    <a href="#">Risk Calculator</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="#">Documentation</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Disclaimer</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2024 Cosmic Tools v1.0 | Created with ❤️ for traders</p>
+            <p class="footer-note">Risk Disclaimer: Trading involves risk. Past performance is not indicative of future results.</p>
+        </div>
+    </footer>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Loading Tool...</p>
+    </div>
+    
+    <!-- Global Scripts -->
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
