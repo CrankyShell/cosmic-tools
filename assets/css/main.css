@@ -55,6 +55,54 @@
 }
 
 /* ============================
+   NOTIFICATION STYLES
+   ============================ */
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--accent-primary);
+    color: #00100a;
+    padding: 12px 20px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    z-index: 9999;
+    animation: slideIn 0.3s ease;
+    box-shadow: var(--shadow-medium);
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+/* Update the Cosmic Analyzer Coming Soon page */
+.coming-soon {
+    text-align: center;
+    padding: var(--space-xxl) var(--space-md);
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.coming-soon h2 {
+    font-size: 48px;
+    margin-bottom: var(--space-md);
+    background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ============================
    RESET & BASE STYLES
    ============================ */
 
