@@ -2,20 +2,21 @@
 class CosmicTools {
     constructor() {
         this.currentTool = null;
-        this.tools = {
-            'cosmic-journal': {
-                name: 'Cosmic Journal',
-                color: '#00ffb3',
-                icon: '📓',
-                description: 'Advanced trading journal with analytics'
-            },
-            'cosmic-analyzer': {
-                name: 'Cosmic Analyzer',
-                color: '#3b7cff',
-                icon: '🔍',
-                description: 'Market analysis tool (Coming Soon)'
-            }
-        };
+        // Update the tools object in main.js
+this.tools = {
+    'cosmic-journal': {
+        name: 'Cosmic Journal',
+        color: '#00ffb3',
+        icon: '📓',
+        description: 'Advanced trading journal with analytics'
+    },
+    'cosmic-analyzer': {
+        name: 'Cosmic Analyzer',
+        color: '#3b7cff',
+        icon: '🔍',
+        description: 'Market analysis tool with session tracking'
+    }
+};
         this.init();
     }
 
