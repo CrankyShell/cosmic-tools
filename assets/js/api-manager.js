@@ -1,4 +1,4 @@
-// API Manager - Simplified for News Only
+// API Manager - Enhanced with Real Free APIs
 class APIManager {
     constructor() {
         this.cache = new Map();
@@ -6,11 +6,27 @@ class APIManager {
             news: 5 * 60 * 1000, // 5 minutes
             events: 30 * 60 * 1000 // 30 minutes
         };
+
+        
+        
+        // API Keys (Store securely in production)
+        this.apiKeys = {
+            alphaVantage: '13JM0Y1Y9HF75Z5M', // Get free from https://www.alphavantage.co/support/#api-key
+            newsAPI: '6e99f26281434af4a8141a41518ee0d3', // Get free from https://newsapi.org/register
+            fred: '27e50a8b813c19f511d7e926d9113ce8' // Get free from https://fred.stlouisfed.org/docs/api/api_key.html
+        };
+        
+        this.baseURLs = {
+            alphaVantage: 'https://www.alphavantage.co/query',
+            newsAPI: 'https://newsapi.org/v2',
+            fred: 'https://api.stlouisfed.org/fred',
+            fxMarketAPI: 'https://fxmarketapi.com'
+        };
         
         this.loadFromLocalStorage();
     }
 
-    // Economic Events API (mock/placeholder - replace with real API)
+    // Economic Events API - Using free tier from FXMarketAPI
     async getEconomicEvents(country = 'US', date = null) {
         const cacheKey = `events_${country}_${date || 'today'}`;
         
@@ -21,12 +37,30 @@ class APIManager {
         }
         
         try {
-            // Note: Replace with real economic calendar API
-            // Example: https://www.econdb.com/api/ or similar
-            // For now, using mock data
+            // Option 1: FXMarketAPI (free tier - 100 req/month)
+            // Note: This requires signup for API key
+            /*
+            const response = await fetch(
+                `${this.baseURLs.fxMarketAPI}/apicalendar?currency=${country}&date=${date || 'today'}&api_key=${this.apiKeys.fxMarketAPI}`
+            );
+            const data = await response.json();
+            */
+            
+            // Option 2: FRED API for US economic indicators (free)
+            if (country === 'US') {
+                const events = await this.getFredEconomicEvents(date);
+                
+                this.cache.set(cacheKey, {
+                    data: events,
+                    timestamp: Date.now()
+                });
+                
+                return events;
+            }
+            
+            // Fallback to mock data if API fails
             const mockEvents = this.generateMockEconomicEvents(country, date);
             
-            // Cache the results
             this.cache.set(cacheKey, {
                 data: mockEvents,
                 timestamp: Date.now()
@@ -36,11 +70,58 @@ class APIManager {
             
         } catch (error) {
             console.warn('Failed to fetch economic events, using mock data:', error.message);
-            return this.generateMockEconomicEvents(country, date);
+            const mockEvents = this.generateMockEconomicEvents(country, date);
+            
+            // Still cache mock data to avoid repeated API failures
+            this.cache.set(cacheKey, {
+                data: mockEvents,
+                timestamp: Date.now()
+            });
+            
+            return mockEvents;
         }
     }
 
-    // Market News API (mock/placeholder - replace with real API)
+    // FRED API for US economic data
+    async getFredEconomicEvents(date = null) {
+        try {
+            // Get recent economic releases
+            const response = await fetch(
+                `${this.baseURLs.fred}/releases?api_key=${this.apiKeys.fred}&file_type=json&limit=10`
+            );
+            
+            if (!response.ok) {
+                throw new Error(`FRED API error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            const events = [];
+            
+            // Convert FRED data to our format
+            if (data.releases && data.releases.length > 0) {
+                data.releases.forEach(release => {
+                    events.push({
+                        time: new Date(release.realtime_start),
+                        country: 'US',
+                        name: release.name,
+                        impact: this.determineImpact(release.name),
+                        actual: null,
+                        forecast: null,
+                        previous: null,
+                        description: release.notes || 'US Economic Indicator'
+                    });
+                });
+            }
+            
+            return events.length > 0 ? events : this.generateMockEconomicEvents('US', date);
+            
+        } catch (error) {
+            console.error('FRED API error:', error);
+            return this.generateMockEconomicEvents('US', date);
+        }
+    }
+
+    // Market News API - Using Alpha Vantage (free tier)
     async getMarketNews(category = 'forex', limit = 10) {
         const cacheKey = `news_${category}_${limit}`;
         
@@ -51,26 +132,139 @@ class APIManager {
         }
         
         try {
-            // Note: Replace with real news API
-            // Options: NewsAPI, Alpha Vantage News, etc.
-            // For now, using mock data
-            const mockNews = this.generateMockMarketNews(category, limit);
+            // Alpha Vantage News Feed
+            const response = await fetch(
+                `${this.baseURLs.alphaVantage}?function=NEWS_SENTIMENT` +
+                `&tickers=${this.getTickersForCategory(category)}` +
+                `&apikey=${this.apiKeys.alphaVantage}` +
+                `&limit=${limit}&sort=LATEST`
+            );
             
-            // Cache the results
+            if (!response.ok) {
+                throw new Error(`Alpha Vantage error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.feed && data.feed.length > 0) {
+                const formattedNews = data.feed.map(item => ({
+                    title: item.title,
+                    excerpt: item.summary || item.title.substring(0, 150) + '...',
+                    content: item.summary || '',
+                    publishedAt: new Date(item.time_published),
+                    source: item.source,
+                    url: item.url,
+                    category: category,
+                    sentiment: item.overall_sentiment_label || 'neutral',
+                    tickers: item.ticker_sentiment?.map(t => t.ticker) || []
+                }));
+                
+                this.cache.set(cacheKey, {
+                    data: formattedNews,
+                    timestamp: Date.now()
+                });
+                
+                return formattedNews;
+            }
+            
+            // Fallback to NewsAPI if Alpha Vantage fails
+            return await this.getNewsAPIFallback(category, limit);
+            
+        } catch (error) {
+            console.warn('Failed to fetch market news, trying fallback:', error.message);
+            
+            // Try fallback API
+            try {
+                const fallbackNews = await this.getNewsAPIFallback(category, limit);
+                if (fallbackNews.length > 0) {
+                    this.cache.set(cacheKey, {
+                        data: fallbackNews,
+                        timestamp: Date.now()
+                    });
+                    return fallbackNews;
+                }
+            } catch (fallbackError) {
+                console.error('Fallback also failed:', fallbackError);
+            }
+            
+            // Final fallback to mock data
+            const mockNews = this.generateMockMarketNews(category, limit);
             this.cache.set(cacheKey, {
                 data: mockNews,
                 timestamp: Date.now()
             });
             
             return mockNews;
-            
-        } catch (error) {
-            console.warn('Failed to fetch market news, using mock data:', error.message);
-            return this.generateMockMarketNews(category, limit);
         }
     }
 
-    // Cache management
+    // NewsAPI.org fallback
+    async getNewsAPIFallback(category, limit) {
+        const query = this.getQueryForCategory(category);
+        
+        const response = await fetch(
+            `${this.baseURLs.newsAPI}/everything` +
+            `?q=${encodeURIComponent(query)}` +
+            `&language=en` +
+            `&sortBy=publishedAt` +
+            `&pageSize=${limit}` +
+            `&apiKey=${this.apiKeys.newsAPI}`
+        );
+        
+        if (!response.ok) {
+            throw new Error(`NewsAPI error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.articles && data.articles.length > 0) {
+            return data.articles.map(article => ({
+                title: article.title,
+                excerpt: article.description || article.title.substring(0, 150) + '...',
+                content: article.content || '',
+                publishedAt: new Date(article.publishedAt),
+                source: article.source.name,
+                url: article.url,
+                category: category
+            }));
+        }
+        
+        return [];
+    }
+
+    // Helper methods
+    getTickersForCategory(category) {
+        const tickerMap = {
+            'forex': 'EURUSD,GBPUSD,USDJPY',
+            'stocks': 'AAPL,MSFT,GOOGL,TSLA',
+            'crypto': 'BTC,ETH',
+            'indices': 'SPY,DIA,QQQ'
+        };
+        return tickerMap[category] || 'forex';
+    }
+
+    getQueryForCategory(category) {
+        const queryMap = {
+            'forex': 'forex trading currency',
+            'stocks': 'stock market investing',
+            'crypto': 'cryptocurrency bitcoin',
+            'indices': 'stock index S&P 500'
+        };
+        return queryMap[category] || 'financial markets';
+    }
+
+    determineImpact(eventName) {
+        const highImpact = ['cpi', 'inflation', 'interest rate', 'fed', 'ecb', 'boe', 'non-farm', 'gdp'];
+        const mediumImpact = ['retail sales', 'manufacturing', 'unemployment', 'housing'];
+        
+        const lowerName = eventName.toLowerCase();
+        
+        if (highImpact.some(term => lowerName.includes(term))) return 'high';
+        if (mediumImpact.some(term => lowerName.includes(term))) return 'medium';
+        return 'low';
+    }
+
+    // Cache management (unchanged)
     getFromCache(cacheKey) {
         const cached = this.cache.get(cacheKey);
         if (cached) {
@@ -86,8 +280,9 @@ class APIManager {
         return null;
     }
 
-    // Mock data generators
+    // Mock data generators (keep as fallback)
     generateMockEconomicEvents(country, date) {
+        // ... (keep your existing mock data generator) ...
         const now = new Date();
         const events = [];
         
@@ -127,6 +322,7 @@ class APIManager {
     }
 
     generateMockMarketNews(category, limit) {
+        // ... (keep your existing mock data generator) ...
         const now = new Date();
         const news = [];
         
@@ -166,6 +362,7 @@ class APIManager {
     }
 
     getEventDescription(eventName) {
+        // ... (keep your existing descriptions) ...
         const descriptions = {
             'CPI Data': 'Consumer Price Index measures changes in the price level of consumer goods and services.',
             'Fed Interest Rate Decision': 'The Federal Reserve sets the target range for the federal funds rate.',
@@ -176,7 +373,7 @@ class APIManager {
         return descriptions[eventName] || 'Important economic indicator that can impact financial markets.';
     }
 
-    // Local Storage for cache persistence
+    // Local Storage for cache persistence (unchanged)
     saveToLocalStorage() {
         const data = {
             cache: Array.from(this.cache.entries()),
@@ -218,6 +415,27 @@ class APIManager {
         this.cache.clear();
         localStorage.removeItem('cosmic-api-cache');
         console.log('API cache cleared');
+    }
+
+    // Test API connectivity
+    async testAPIConnectivity() {
+        const results = {
+            alphaVantage: false,
+            newsAPI: false,
+            fred: false
+        };
+        
+        try {
+            // Test Alpha Vantage
+            const avTest = await fetch(
+                `${this.baseURLs.alphaVantage}?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=${this.apiKeys.alphaVantage}`
+            );
+            results.alphaVantage = avTest.ok;
+        } catch (e) {
+            console.warn('Alpha Vantage test failed:', e.message);
+        }
+        
+        return results;
     }
 }
 
