@@ -16,7 +16,303 @@
     <link rel="stylesheet" href="../../assets/css/analyzer.css">
     
     <style>
-        /* Additional inline styles for new features */
+        /* COMPACT: Reduced overall sizes */
+        :root {
+            --compact-space-xs: 3px;
+            --compact-space-sm: 6px;
+            --compact-space-md: 12px;
+            --compact-space-lg: 18px;
+            --compact-space-xl: 24px;
+        }
+        
+        /* Updated: Fixed Sidebar Layout */
+        .tool-wrapper {
+            display: flex;
+            min-height: calc(100vh - 100px);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        /* Sticky Sidebar - FIXED HOVER ISSUE */
+        .tool-sidebar {
+            width: 220px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(26, 31, 37, 0.95) 0%, rgba(18, 24, 31, 0.95) 100%);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 90px;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 8px;
+        }
+        
+        .sidebar-header h3 {
+            font-size: 16px;
+            color: var(--accent-primary);
+            margin-bottom: 4px;
+        }
+        
+        .sidebar-header p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+        
+        .sidebar-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar-btn i {
+            width: 18px;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .sidebar-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border-color: var(--border-light);
+        }
+        
+        .sidebar-btn.active {
+            background: rgba(0, 255, 179, 0.1);
+            color: var(--accent-primary);
+            border-color: rgba(0, 255, 179, 0.2);
+        }
+        
+        .sidebar-btn.active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 255, 179, 0.05);
+            z-index: -1;
+            animation: none !important;
+        }
+        
+        .sidebar-btn.active i {
+            color: var(--accent-primary);
+        }
+        
+        .sidebar-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-section h4 {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .sidebar-stats {
+            margin-top: auto;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 12px;
+        }
+        
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        /* Main Content Area - COMPACT */
+        .tool-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-width: 0;
+        }
+        
+        /* COMPACT: Market Selection Section */
+        .market-selection-section {
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .market-selector-container {
+            min-height: 200px;
+            gap: 15px;
+        }
+        
+        .market-selector-card, .live-preview-card {
+            padding: 15px;
+        }
+        
+        /* COMPACT: Session Timeline */
+        .session-timeline-section {
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .session-cards {
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .session-card {
+            padding: 12px;
+        }
+        
+        /* COMPACT: Analysis Grid */
+        .analysis-grid {
+            gap: 15px;
+        }
+        
+        /* FIXED: TradingView Chart - LARGER SIZE */
+        .tradingview-chart-container {
+            height: 650px !important;
+            min-height: 650px !important;
+        }
+        
+        /* COMPACT: Dashboard Sections */
+        .dashboard-section {
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .dashboard-section h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        
+        /* COMPACT: Tool Header */
+        .tool-header {
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .tool-header h2 {
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+        
+        .tool-header p {
+            font-size: 13px;
+        }
+        
+        .back-to-hub {
+            padding: 6px 10px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        /* Responsive Sidebar */
+        @media (max-width: 1024px) {
+            .tool-wrapper {
+                flex-direction: column;
+            }
+            
+            .tool-sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+                order: 2;
+                margin-top: 15px;
+            }
+            
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .sidebar-btn {
+                flex: 1;
+                min-width: 140px;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .tool-wrapper {
+                gap: 12px;
+            }
+            
+            .analysis-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .market-selector-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .session-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .tradingview-chart-container {
+                height: 500px !important;
+                min-height: 500px !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .tool-sidebar {
+                padding: 12px;
+            }
+            
+            .sidebar-nav {
+                flex-direction: column;
+            }
+            
+            .sidebar-btn {
+                width: 100%;
+                min-width: 0;
+            }
+        }
+        
+        /* Chart size controls */
         .chart-sizes {
             display: none;
             position: absolute;
@@ -59,6 +355,27 @@
             color: var(--text-secondary);
             margin-top: 2px;
         }
+        
+        /* Keep existing cosmic background */
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(59, 124, 255, 0.1) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 255, 179, 0.05) 0%, transparent 40%),
+                linear-gradient(125deg, #0a0e14 0%, #0f1722 50%, #0d1521 100%);
+            background-size: 100% 100%, 100% 100%, 200% 200%;
+            background-position: 0 0, 0 0, 0% 0%;
+            animation: gradientShift 30s ease infinite alternate;
+        }
+        
+        body {
+            background: transparent !important;
+        }
     </style>
 </head>
 <body>
@@ -70,373 +387,892 @@
         <div class="nav-container">
             <div class="nav-logo">
                 <a href="../../index.html" style="text-decoration: none;">
-                    <h1>Cosmic Tools</h1>
+                    <h1><i class="fas fa-rocket"></i> Cosmic Tools</h1>
                     <div class="nav-subtitle">Trading Tools Hub</div>
                 </a>
             </div>
             
             <div class="nav-links">
-                <a href="../../index.html" class="nav-link">Home</a>
-                <a href="../cosmic-journal/index.html" class="nav-link">Cosmic Journal</a>
-                <a href="index.html" class="nav-link active">Cosmic Analyzer</a>
-                <a href="../../about.html" class="nav-link">About</a>
-                <a href="../../contact.html" class="nav-link">Contact</a>
+                <a href="../../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="../cosmic-journal/index.html" class="nav-link"><i class="fas fa-book"></i> Cosmic Journal</a>
+                <a href="index.html" class="nav-link active"><i class="fas fa-chart-line"></i> Cosmic Analyzer</a>
+                <a href="../../about.html" class="nav-link"><i class="fas fa-info-circle"></i> About</a>
+                <a href="../../contact.html" class="nav-link"><i class="fas fa-envelope"></i> Contact</a>
             </div>
             
-            <button class="nav-menu-btn" id="mobile-menu-btn">☰</button>
+            <button class="nav-menu-btn" id="mobile-menu-btn"><i class="fas fa-bars"></i></button>
         </div>
     </nav>
     
     <!-- Mobile Navigation -->
     <div class="mobile-nav" id="mobile-nav">
-        <a href="../../index.html" class="mobile-nav-link">Home</a>
-        <a href="../cosmic-journal/index.html" class="mobile-nav-link">Cosmic Journal</a>
-        <a href="index.html" class="mobile-nav-link active">Cosmic Analyzer</a>
-        <a href="../../about.html" class="mobile-nav-link">About</a>
-        <a href="../../contact.html" class="mobile-nav-link">Contact</a>
+        <a href="../../index.html" class="mobile-nav-link"><i class="fas fa-home"></i> Home</a>
+        <a href="../cosmic-journal/index.html" class="mobile-nav-link"><i class="fas fa-book"></i> Cosmic Journal</a>
+        <a href="index.html" class="mobile-nav-link active"><i class="fas fa-chart-line"></i> Cosmic Analyzer</a>
+        <a href="../../about.html" class="mobile-nav-link"><i class="fas fa-info-circle"></i> About</a>
+        <a href="../../contact.html" class="mobile-nav-link"><i class="fas fa-envelope"></i> Contact</a>
     </div>
     
-<!-- Main Analyzer Container -->
-<main class="tool-container">
-    <div class="tool-header">
-        <a href="../../index.html" class="back-to-hub">
-            ← Back to Hub
-        </a>
-        
-        <h2>Cosmic Analyzer - Multi-Market Analysis Suite</h2>
-        <p>Select a market type and instrument to get real-time analysis, economic events, and trading insights.</p>
-        
-        <div class="tool-breadcrumb">
-            <a href="../../index.html" class="breadcrumb-item">Home</a>
-            <span class="breadcrumb-separator">›</span>
-            <a href="../../index.html" class="breadcrumb-item">Tools</a>
-            <span class="breadcrumb-separator">›</span>
-            <span class="breadcrumb-current">Cosmic Analyzer</span>
+    <!-- Main Analyzer Container -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <a href="../../index.html" class="back-to-hub">
+                <i class="fas fa-arrow-left"></i> Back to Hub
+            </a>
+            
+            <h2>Cosmic Analyzer - Multi-Market Analysis Suite</h2>
+            <p>Select a market type and instrument to get real-time analysis, economic events, and trading insights.</p>
+            
+            <div class="tool-breadcrumb">
+                <a href="../../index.html" class="breadcrumb-item">Home</a>
+                <span class="breadcrumb-separator">›</span>
+                <a href="../../index.html" class="breadcrumb-item">Tools</a>
+                <span class="breadcrumb-separator">›</span>
+                <span class="breadcrumb-current">Cosmic Analyzer</span>
+            </div>
         </div>
-    </div>
-    
-    <div class="analyzer-dashboard" id="analyzer-dashboard">
-        <!-- REDESIGNED: Market Selection Section -->
-        <section class="dashboard-section market-selection-section" id="market-selection">
-            <h3>Market Selection</h3>
-            <div class="market-selector-container">
-                <!-- Left side - Market Selector Card -->
-                <div class="market-selector-card">
-                    <div class="selector-group">
-                        <div class="selector-label">Market Type</div>
-                        <div class="market-type-grid" id="market-type-buttons">
-                            <!-- Market type buttons will be populated by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <div class="selector-group">
-                        <div class="selector-label">Instrument</div>
-                        <div class="pair-select-wrapper">
-                            <select id="currency-pair" class="pair-select">
-                                <!-- Options will be populated by JavaScript -->
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="analyze-action">
-                        <button id="analyze-pair" class="analyze-pair-btn">
-                            <span class="btn-icon">🚀</span>
-                            Launch Analysis
-                        </button>
-                    </div>
+        
+        <!-- Sidebar Layout -->
+        <div class="tool-wrapper">
+            <!-- Sidebar - FIXED: Removed Display Options -->
+            <aside class="tool-sidebar">
+                <div class="sidebar-header">
+                    <h3><i class="fas fa-cogs"></i> Website Navigation</h3>
+                    <p>Analyzer settings and tools</p>
                 </div>
                 
-                <!-- Right side - Live Preview Card -->
-                <div class="live-preview-card">
-                    <div class="preview-header">
-                        <div class="preview-title">Live Preview</div>
-                        <div class="current-symbol" id="current-symbol-display">EUR/USD</div>
+                <div class="sidebar-nav" id="sidebar-nav">
+                    <button class="sidebar-btn active" id="sidebar-market-analysis">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Market Analysis</span>
+                    </button>
+                    <button class="sidebar-btn" id="sidebar-chart-settings">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Chart Settings</span>
+                    </button>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h4><i class="fas fa-tools"></i> Quick Actions</h4>
+                    <button class="sidebar-btn" id="sidebar-open-journal">
+                        <i class="fas fa-book"></i>
+                        <span>Open Journal</span>
+                    </button>
+                    <button class="sidebar-btn" id="sidebar-reset-analysis">
+                        <i class="fas fa-redo"></i>
+                        <span>Reset Analysis</span>
+                    </button>
+                    <button class="sidebar-btn" id="sidebar-export-snapshot">
+                        <i class="fas fa-camera"></i>
+                        <span>Take Snapshot</span>
+                    </button>
+                </div>
+                
+                <div class="sidebar-stats">
+                    <h4><i class="fas fa-chart-bar"></i> Market Status</h4>
+                    <div class="stat-item">
+                        <span class="stat-label">Active Sessions:</span>
+                        <span class="stat-value" id="sidebar-active-sessions">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Current Time:</span>
+                        <span class="stat-value" id="sidebar-current-time">--:--</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Timezone:</span>
+                        <span class="stat-value" id="sidebar-timezone">UTC</span>
+                    </div>
+                </div>
+            </aside>
+            
+            <!-- Main Content Area - TOOL-SPECIFIC FEATURES -->
+            <div class="tool-main">
+                <!-- RESTORED: Market Selection Section - FIXED: No duplicate buttons -->
+                <section class="dashboard-section market-selection-section" id="market-selection">
+                    <h3><i class="fas fa-chart-line"></i> Market Selection</h3>
+                    <div class="market-selector-container">
+                        <!-- Left side - Market Selector Card -->
+                        <div class="market-selector-card">
+                            <div class="selector-group">
+                                <div class="selector-label"><i class="fas fa-globe"></i> Market Type</div>
+                                <div class="market-type-grid" id="market-type-buttons">
+                                    <!-- Market type buttons will be populated by JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <div class="selector-group">
+                                <div class="selector-label"><i class="fas fa-exchange-alt"></i> Instrument</div>
+                                <div class="pair-select-wrapper">
+                                    <select id="currency-pair" class="pair-select">
+                                        <!-- Options will be populated by JavaScript -->
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="analyze-action">
+                                <button id="analyze-pair" class="analyze-pair-btn">
+                                    <i class="fas fa-rocket"></i> Launch Analysis
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Right side - Live Preview Card -->
+                        <div class="live-preview-card">
+                            <div class="preview-header">
+                                <div class="preview-title"><i class="fas fa-eye"></i> Live Preview</div>
+                                <div class="current-symbol" id="current-symbol-display">EUR/USD</div>
+                            </div>
+                            
+                            <div class="preview-content">
+                                <!-- Mini Chart Only - No Stats -->
+                                <div class="mini-chart-widget" id="mini-tradingview-widget">
+                                    <!-- TradingView Mini Symbol Overview Widget -->
+                                    <!-- Will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- RESTORED: Live Session Timeline -->
+                <section class="dashboard-section session-timeline-section">
+                    <div class="timeline-header">
+                        <h3><i class="fas fa-clock"></i> Live Session Timeline</h3>
+                        <div class="timezone-controls">
+                            <div class="timezone-selector">
+                                <label for="timezone-select">Timezone:</label>
+                                <select id="timezone-select" class="timezone-select">
+                                    <!-- Options will be populated by JavaScript -->
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="preview-content">
-                        <!-- Mini Chart Only - No Stats -->
-                        <div class="mini-chart-widget" id="mini-tradingview-widget">
-                            <!-- TradingView Mini Symbol Overview Widget -->
+                    <!-- Session Cards -->
+                    <div class="session-cards">
+                        <div class="session-card session-tokyo" id="tokyo-session">
+                            <div class="session-header">
+                                <div class="session-title"><i class="fas fa-city"></i> Tokyo Session</div>
+                                <div class="session-status" id="tokyo-status">--</div>
+                            </div>
+                            <div class="session-times">
+                                <div>
+                                    <div class="session-time" id="tokyo-local-start">00:00</div>
+                                    <div class="session-time-label">Local Start</div>
+                                </div>
+                                <div>
+                                    <div class="session-time" id="tokyo-local-end">09:00</div>
+                                    <div class="session-time-label">Local End</div>
+                                </div>
+                            </div>
+                            <div class="session-progress">
+                                <div class="progress-label">
+                                    <span>Progress</span>
+                                    <span id="tokyo-progress-text">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="tokyo-progress-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="session-card session-london" id="london-session">
+                            <div class="session-header">
+                                <div class="session-title"><i class="fas fa-landmark"></i> London Session</div>
+                                <div class="session-status" id="london-status">--</div>
+                            </div>
+                            <div class="session-times">
+                                <div>
+                                    <div class="session-time" id="london-local-start">08:00</div>
+                                    <div class="session-time-label">Local Start</div>
+                                </div>
+                                <div>
+                                    <div class="session-time" id="london-local-end">17:00</div>
+                                    <div class="session-time-label">Local End</div>
+                                </div>
+                            </div>
+                            <div class="session-progress">
+                                <div class="progress-label">
+                                    <span>Progress</span>
+                                    <span id="london-progress-text">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="london-progress-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="session-card session-newyork" id="newyork-session">
+                            <div class="session-header">
+                                <div class="session-title"><i class="fas fa-flag-usa"></i> New York Session</div>
+                                <div class="session-status" id="newyork-status">--</div>
+                            </div>
+                            <div class="session-times">
+                                <div>
+                                    <div class="session-time" id="newyork-local-start">13:00</div>
+                                    <div class="session-time-label">Local Start</div>
+                                </div>
+                                <div>
+                                    <div class="session-time" id="newyork-local-end">22:00</div>
+                                    <div class="session-time-label">Local End</div>
+                                </div>
+                            </div>
+                            <div class="session-progress">
+                                <div class="progress-label">
+                                    <span>Progress</span>
+                                    <span id="newyork-progress-text">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="newyork-progress-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Current Time Display -->
+                    <div class="current-time-display">
+                        <div class="current-time-label" id="current-time-display">--:-- --</div>
+                        <div class="current-timezone" id="current-timezone">Timezone</div>
+                    </div>
+                    
+                    <!-- Market Stats -->
+                    <div class="market-stats">
+                        <div class="market-stat">
+                            <div class="stat-label">Volume (24h)</div>
+                            <div class="stat-value" id="volume-stat">--</div>
+                            <div class="stat-change" id="volume-change">--</div>
+                        </div>
+                        <div class="market-stat">
+                            <div class="stat-label">Spread</div>
+                            <div class="stat-value" id="spread-stat">--</div>
+                            <div class="stat-change" id="spread-change">--</div>
+                        </div>
+                        <div class="market-stat">
+                            <div class="stat-label">Market Hours</div>
+                            <div class="stat-value" id="active-sessions">--</div>
+                            <div class="stat-change" id="next-session">--</div>
+                        </div>
+                        <div class="market-stat">
+                            <div class="stat-label">Session Overlap</div>
+                            <div class="stat-value" id="overlap-status">--</div>
+                            <div class="stat-change" id="overlap-hours">--</div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- RESTORED: Main Analysis Grid -->
+                <div class="analysis-grid" id="analysis-grid">
+                    <!-- Price Chart Section - FIXED: Larger chart -->
+                    <section class="dashboard-section price-chart-section">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-candlestick"></i> Advanced Chart</h3>
+                            <div class="chart-controls">
+                                <button class="resize-btn" id="chart-size-btn" title="Chart Size">
+                                    <i class="fas fa-expand-alt"></i>
+                                </button>
+                                <div class="chart-sizes" id="chart-size-options">
+                                    <div class="size-option" data-size="500">Small<span class="size-label">500px</span></div>
+                                    <div class="size-option active" data-size="650">Medium<span class="size-label">650px</span></div>
+                                    <div class="size-option" data-size="800">Large<span class="size-label">800px</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- TradingView Advanced Chart - FIXED: Larger container -->
+                        <div class="tradingview-chart-container" id="tradingview-chart-container" style="height: 650px;">
+                            <div class="tradingview-chart-widget" id="tradingview-chart">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Economic Calendar - FIXED: Pair-specific news filter -->
+                    <section class="dashboard-section economic-calendar-section">
+                        <div class="calendar-header">
+                            <h3><i class="fas fa-calendar-alt"></i> Economic Calendar</h3>
+                        </div>
+                        
+                        <div class="calendar-toggle">
+                            <div class="toggle-label">
+                                <i class="fas fa-newspaper"></i> Pair-Specific News
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="calendar-toggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <div class="toggle-description">
+                                Show only news related to selected pair
+                            </div>
+                        </div>
+                        
+                        <div class="tradingview-widget-container" id="economic-calendar-widget">
                             <!-- Will be populated by JavaScript -->
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Live Session Timeline -->
-        <section class="dashboard-section session-timeline-section">
-            <div class="timeline-header">
-                <h3>Live Session Timeline</h3>
-                <div class="timezone-controls">
-                    <div class="timezone-selector">
-                        <label for="timezone-select">Timezone:</label>
-                        <select id="timezone-select" class="timezone-select">
-                            <!-- Options will be populated by JavaScript -->
-                        </select>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Session Cards -->
-            <div class="session-cards">
-                <div class="session-card session-tokyo" id="tokyo-session">
-                    <div class="session-header">
-                        <div class="session-title">Tokyo Session</div>
-                        <div class="session-status" id="tokyo-status">--</div>
-                    </div>
-                    <div class="session-times">
-                        <div>
-                            <div class="session-time" id="tokyo-local-start">00:00</div>
-                            <div class="session-time-label">Local Start</div>
-                        </div>
-                        <div>
-                            <div class="session-time" id="tokyo-local-end">09:00</div>
-                            <div class="session-time-label">Local End</div>
-                        </div>
-                    </div>
-                    <div class="session-progress">
-                        <div class="progress-label">
-                            <span>Progress</span>
-                            <span id="tokyo-progress-text">0%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="tokyo-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
+                    </section>
                 </div>
                 
-                <div class="session-card session-london" id="london-session">
-                    <div class="session-header">
-                        <div class="session-title">London Session</div>
-                        <div class="session-status" id="london-status">--</div>
-                    </div>
-                    <div class="session-times">
-                        <div>
-                            <div class="session-time" id="london-local-start">08:00</div>
-                            <div class="session-time-label">Local Start</div>
-                        </div>
-                        <div>
-                            <div class="session-time" id="london-local-end">17:00</div>
-                            <div class="session-time-label">Local End</div>
+                <!-- RESTORED: News Section - FIXED: Better filtering -->
+                <section class="dashboard-section news-section">
+                    <div class="news-header">
+                        <h3><i class="fas fa-newspaper"></i> Latest Market News</h3>
+                        <div class="news-controls">
+                            <div class="news-source-badges">
+                                <span class="news-badge financial-juice">Financial Juice</span>
+                            </div>
+                            <button class="refresh-btn" id="refresh-news">
+                                <i class="fas fa-sync-alt"></i> Refresh News
+                            </button>
                         </div>
                     </div>
-                    <div class="session-progress">
-                        <div class="progress-label">
-                            <span>Progress</span>
-                            <span id="london-progress-text">0%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="london-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="session-card session-newyork" id="newyork-session">
-                    <div class="session-header">
-                        <div class="session-title">New York Session</div>
-                        <div class="session-status" id="newyork-status">--</div>
-                    </div>
-                    <div class="session-times">
-                        <div>
-                            <div class="session-time" id="newyork-local-start">13:00</div>
-                            <div class="session-time-label">Local Start</div>
-                        </div>
-                        <div>
-                            <div class="session-time" id="newyork-local-end">22:00</div>
-                            <div class="session-time-label">Local End</div>
+                    
+                    <div class="news-container" id="news-container">
+                        <!-- News will be loaded here with proper filtering -->
+                        <div class="loading-news" id="news-loading">
+                            <div class="loading-spinner"></div>
+                            <p>Loading news...</p>
                         </div>
                     </div>
-                    <div class="session-progress">
-                        <div class="progress-label">
-                            <span>Progress</span>
-                            <span id="newyork-progress-text">0%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="newyork-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Current Time Display -->
-            <div class="current-time-display">
-                <div class="current-time-label" id="current-time-display">--:-- --</div>
-                <div class="current-timezone" id="current-timezone">Timezone</div>
-            </div>
-            
-            <!-- Market Stats -->
-            <div class="market-stats">
-                <div class="market-stat">
-                    <div class="stat-label">Volume (24h)</div>
-                    <div class="stat-value" id="volume-stat">--</div>
-                    <div class="stat-change" id="volume-change">--</div>
-                </div>
-                <div class="market-stat">
-                    <div class="stat-label">Spread</div>
-                    <div class="stat-value" id="spread-stat">--</div>
-                    <div class="stat-change" id="spread-change">--</div>
-                </div>
-                <div class="market-stat">
-                    <div class="stat-label">Market Hours</div>
-                    <div class="stat-value" id="active-sessions">--</div>
-                    <div class="stat-change" id="next-session">--</div>
-                </div>
-                <div class="market-stat">
-                    <div class="stat-label">Session Overlap</div>
-                    <div class="stat-value" id="overlap-status">--</div>
-                    <div class="stat-change" id="overlap-hours">--</div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Main Analysis Grid - Side by side -->
-        <div class="analysis-grid" id="analysis-grid">
-            <!-- Price Chart Section -->
-            <!-- In the price-chart-section of your index.html -->
-<section class="dashboard-section price-chart-section">
-    <div class="chart-header">
-        <h3>Advanced Chart</h3>
-        <div class="chart-controls">
-            <button class="resize-btn" id="chart-size-btn" title="Chart Size">
-                📐
-            </button>
-            <div class="chart-sizes" id="chart-size-options">
-                <div class="size-option" data-size="550">Small<span class="size-label">550px</span></div>
-                <div class="size-option active" data-size="650">Medium<span class="size-label">650px</span></div>
-                <div class="size-option" data-size="750">Large<span class="size-label">750px</span></div>
-                <div class="size-option" data-size="auto">Auto<span class="size-label">Dynamic</span></div>
+                </section>
             </div>
         </div>
-    </div>
-    
-    <!-- TradingView Advanced Chart -->
-    <div class="tradingview-chart-container" id="tradingview-chart-container">
-        <div class="tradingview-chart-widget" id="tradingview-chart">
-            <!-- Will be populated by JavaScript -->
-        </div>
-    </div>
-</section>
-            
-            <!-- Economic Calendar -->
-            <section class="dashboard-section economic-calendar-section">
-                <div class="calendar-header">
-                    <h3>Economic Calendar</h3>
-                </div>
-                
-                <div class="calendar-toggle">
-                    <div class="toggle-label">
-                        Pair-Specific News
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="calendar-toggle" checked>
-                        <span class="toggle-slider"></span>
-                    </label>
-                    <div class="toggle-description">
-                        Show only news related to selected pair
-                    </div>
-                </div>
-                
-                <div class="tradingview-widget-container" id="economic-calendar-widget">
-                    <!-- Will be populated by JavaScript -->
-                </div>
-            </section>
-        </div>
-        
-        <!-- News Section -->
-        <section class="dashboard-section news-section">
-            <div class="news-header">
-                <h3>Latest Market News</h3>
-                <button class="refresh-btn" id="refresh-news">
-                    <span class="refresh-icon">🔄</span>
-                    Refresh News
-                </button>
-            </div>
-            
-            <div class="tradingview-widget-container" id="news-widget">
-                <!-- Will be populated by JavaScript -->
-            </div>
-        </section>
-        
-        <!-- Quick Actions -->
-        <section class="dashboard-section actions-section">
-            <h3>Quick Actions</h3>
-            <div class="actions-grid">
-                <button class="action-btn" id="open-journal">
-                    <span class="action-icon">📓</span>
-                    <span class="action-text">Open Journal</span>
-                </button>
-                <button class="action-btn" id="reset-analysis">
-                    <span class="action-icon">🔄</span>
-                    <span class="action-text">Reset Analysis</span>
-                </button>
-                <button class="action-btn" id="back-to-top">
-                    <span class="action-icon">⬆️</span>
-                    <span class="action-text">Back To Top</span>
-                </button>
-                <button class="action-btn" id="export-snapshot">
-                    <span class="action-icon">📷</span>
-                    <span class="action-text">Take Snapshot</span>
-                </button>
-            </div>
-        </section>
-    </div>
-</main>
+    </main>
     
     <!-- Footer -->
     <footer class="global-footer">
         <div class="footer-content">
             <div class="footer-brand">
-                <h3>Cosmic Tools</h3>
+                <h3><i class="fas fa-rocket"></i> Cosmic Tools</h3>
                 <p>Trading Tools Hub</p>
                 <div class="footer-social">
-                    <a href="#" class="social-link">Twitter</a>
-                    <a href="#" class="social-link">Instagram</a>
-                    <a href="#" class="social-link">Discord</a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i> Twitter</a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a href="#" class="social-link"><i class="fab fa-discord"></i> Discord</a>
                 </div>
             </div>
             
             <div class="footer-links">
                 <div class="footer-column">
-                    <h4>Tools</h4>
-                    <a href="../cosmic-journal/index.html">Cosmic Journal</a>
-                    <a href="index.html">Cosmic Analyzer</a>
-                    <a href="#">Risk Calculator</a>
+                    <h4><i class="fas fa-tools"></i> Tools</h4>
+                    <a href="../cosmic-journal/index.html"><i class="fas fa-book"></i> Cosmic Journal</a>
+                    <a href="index.html"><i class="fas fa-chart-line"></i> Cosmic Analyzer</a>
+                    <a href="#"><i class="fas fa-calculator"></i> Risk Calculator</a>
                 </div>
                 
                 <div class="footer-column">
-                    <h4>Resources</h4>
-                    <a href="../../about.html">About</a>
-                    <a href="../../contact.html">Contact</a>
-                    <a href="#">Documentation</a>
+                    <h4><i class="fas fa-book"></i> Resources</h4>
+                    <a href="../../about.html"><i class="fas fa-info-circle"></i> About</a>
+                    <a href="../../contact.html"><i class="fas fa-envelope"></i> Contact</a>
+                    <a href="#"><i class="fas fa-file-alt"></i> Documentation</a>
                 </div>
                 
                 <div class="footer-column">
-                    <h4>Legal</h4>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Disclaimer</a>
+                    <h4><i class="fas fa-gavel"></i> Legal</h4>
+                    <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+                    <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+                    <a href="#"><i class="fas fa-exclamation-triangle"></i> Disclaimer</a>
                 </div>
             </div>
         </div>
         
         <div class="footer-bottom">
-            <p>© 2024 Cosmic Tools v1.0 | Created with ❤️ for traders</p>
-            <p class="footer-note">Risk Disclaimer: Trading involves risk. Past performance is not indicative of future results.</p>
+            <p><i class="fas fa-copyright"></i> 2024 Cosmic Tools v1.0 | Created with <i class="fas fa-heart" style="color: var(--accent-danger);"></i> for traders</p>
+            <p class="footer-note"><i class="fas fa-exclamation-circle"></i> Risk Disclaimer: Trading involves risk. Past performance is not indicative of future results.</p>
         </div>
     </footer>
 
 <!-- Global Scripts -->
 <script src="../../assets/js/main.js"></script>
+<!-- API Manager MUST be loaded before analyzer.js -->
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/api-manager.js"></script>
 <!-- Analyzer Scripts -->
 <script src="../../assets/js/analyzer.js"></script>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            if (window.CosmicTools) {
-                window.CosmicTools.initializeTool('cosmic-analyzer');
-            }
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize loading overlay
+        const loadingOverlay = document.createElement('div');
+        loadingOverlay.className = 'loading-overlay active';
+        loadingOverlay.innerHTML = '<div class="loading-spinner"></div><p>Loading Analyzer...</p>';
+        document.body.appendChild(loadingOverlay);
+        
+        setTimeout(() => {
+            loadingOverlay.remove();
+        }, 1000);
+
+        // Initialize sidebar functionality - FIXED: No hover persistence
+        const sidebarBtns = document.querySelectorAll('.sidebar-btn');
+        sidebarBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Remove active class from all buttons
+                sidebarBtns.forEach(b => {
+                    b.classList.remove('active');
+                    b.style.transform = 'none';
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const action = this.id;
+                switch(action) {
+                    case 'sidebar-market-analysis':
+                        document.getElementById('market-selection').scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    case 'sidebar-chart-settings':
+                        // Show chart settings modal
+                        showChartSettings();
+                        break;
+                    case 'sidebar-open-journal':
+                        window.open('../cosmic-journal/index.html', '_blank');
+                        break;
+                    case 'sidebar-reset-analysis':
+                        // Reset analysis functionality
+                        resetAnalysis();
+                        break;
+                    case 'sidebar-export-snapshot':
+                        // Take snapshot functionality
+                        takeSnapshot();
+                        break;
+                }
+            });
         });
-    </script>
+
+        // FIXED: Chart resize functionality
+        const chartSizeBtn = document.getElementById('chart-size-btn');
+        const chartSizeOptions = document.getElementById('chart-size-options');
+        const chartContainer = document.getElementById('tradingview-chart-container');
+        
+        if (chartSizeBtn && chartSizeOptions) {
+            chartSizeBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                chartSizeOptions.classList.toggle('show');
+            });
+            
+            // Handle chart size selection
+            const sizeOptions = chartSizeOptions.querySelectorAll('.size-option');
+            sizeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const size = this.getAttribute('data-size');
+                    
+                    // Update active class
+                    sizeOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Resize chart container
+                    if (chartContainer) {
+                        chartContainer.style.height = size + 'px';
+                        chartContainer.style.minHeight = size + 'px';
+                        
+                        // Reinitialize TradingView widget if it exists
+                        if (window.TradingView && window.tvWidget) {
+                            setTimeout(() => {
+                                window.tvWidget.resize();
+                            }, 100);
+                        }
+                    }
+                    
+                    // Hide dropdown
+                    chartSizeOptions.classList.remove('show');
+                });
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!chartSizeBtn.contains(e.target) && !chartSizeOptions.contains(e.target)) {
+                    chartSizeOptions.classList.remove('show');
+                }
+            });
+        }
+
+        // FIXED: Market type buttons - NO DUPLICATES
+        const marketTypes = [
+            { id: 'forex', name: 'Forex', icon: 'fas fa-globe-americas' },
+            { id: 'crypto', name: 'Crypto', icon: 'fas fa-coins' },
+            { id: 'indices', name: 'Indices', icon: 'fas fa-chart-line' },
+            { id: 'commodities', name: 'Commodities', icon: 'fas fa-gas-pump' }
+        ];
+        
+        const marketTypeContainer = document.getElementById('market-type-buttons');
+        if (marketTypeContainer) {
+            // Clear any existing duplicates
+            marketTypeContainer.innerHTML = '';
+            
+            marketTypes.forEach(type => {
+                const btn = document.createElement('button');
+                btn.className = 'market-type-btn';
+                if (type.id === 'forex') btn.classList.add('active');
+                btn.innerHTML = `<i class="${type.icon}"></i><span>${type.name}</span>`;
+                btn.setAttribute('data-market', type.id);
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.market-type-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    updateCurrencyPairs(this.getAttribute('data-market'));
+                });
+                marketTypeContainer.appendChild(btn);
+            });
+        }
+        
+        function updateCurrencyPairs(marketType) {
+            const pairs = {
+                forex: ['EUR/USD', 'GBP/USD', 'USD/JPY', 'AUD/USD', 'USD/CAD', 'NZD/USD', 'EUR/GBP'],
+                crypto: ['BTC/USD', 'ETH/USD', 'XRP/USD', 'ADA/USD', 'SOL/USD', 'DOT/USD'],
+                indices: ['US30', 'US100', 'US500', 'GER40', 'UK100', 'JPN225'],
+                commodities: ['XAU/USD', 'XAG/USD', 'CL-OIL', 'NGAS', 'COPPER']
+            };
+            
+            const select = document.getElementById('currency-pair');
+            if (select && pairs[marketType]) {
+                select.innerHTML = '';
+                pairs[marketType].forEach(pair => {
+                    const option = document.createElement('option');
+                    option.value = pair;
+                    option.textContent = pair;
+                    select.appendChild(option);
+                });
+                document.getElementById('current-symbol-display').textContent = pairs[marketType][0];
+                updateNewsFilter(pairs[marketType][0]);
+            }
+        }
+        
+        // FIXED: News filtering based on selected pair
+        function updateNewsFilter(symbol) {
+            // Extract currencies from symbol (e.g., "EUR/USD" -> ["EUR", "USD"])
+            const currencies = symbol.split('/');
+            localStorage.setItem('selectedPair', symbol);
+            localStorage.setItem('filterCurrencies', JSON.stringify(currencies));
+            
+            // If news container exists, reload with filtered news
+            if (window.loadFilteredNews) {
+                window.loadFilteredNews();
+            }
+        }
+        
+        // Initialize with forex pairs
+        updateCurrencyPairs('forex');
+        
+        // Handle pair selection change
+        const pairSelect = document.getElementById('currency-pair');
+        if (pairSelect) {
+            pairSelect.addEventListener('change', function() {
+                const selectedPair = this.value;
+                document.getElementById('current-symbol-display').textContent = selectedPair;
+                updateNewsFilter(selectedPair);
+                
+                // Update TradingView widgets if they exist
+                updateTradingViewWidgets(selectedPair);
+            });
+        }
+        
+        // Handle analyze button
+        const analyzeBtn = document.getElementById('analyze-pair');
+        if (analyzeBtn) {
+            analyzeBtn.addEventListener('click', function() {
+                const selectedPair = document.getElementById('currency-pair').value;
+                updateTradingViewWidgets(selectedPair);
+                showToast(`Analyzing ${selectedPair}...`, 'info');
+            });
+        }
+        
+        // FIXED: Reset analysis function
+        function resetAnalysis() {
+            if (confirm('Reset all analysis to default settings?')) {
+                // Reset to default forex pair
+                document.querySelectorAll('.market-type-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector('.market-type-btn[data-market="forex"]').classList.add('active');
+                updateCurrencyPairs('forex');
+                
+                // Reset chart size
+                if (chartContainer) {
+                    chartContainer.style.height = '650px';
+                    chartContainer.style.minHeight = '650px';
+                }
+                
+                // Reset timezone to UTC
+                const timezoneSelect = document.getElementById('timezone-select');
+                if (timezoneSelect) {
+                    timezoneSelect.value = 'UTC';
+                }
+                
+                showToast('Analysis reset to default settings', 'success');
+            }
+        }
+        
+        // FIXED: Take snapshot function
+        function takeSnapshot() {
+            showToast('Taking snapshot...', 'info');
+            
+            // Create a temporary canvas to capture the chart
+            setTimeout(() => {
+                if (typeof html2canvas !== 'undefined') {
+                    html2canvas(document.querySelector('.price-chart-section')).then(canvas => {
+                        const link = document.createElement('a');
+                        link.download = `chart-snapshot-${new Date().toISOString().slice(0,10)}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        showToast('Snapshot saved successfully!', 'success');
+                    }).catch(err => {
+                        console.error('Snapshot error:', err);
+                        showToast('Failed to take snapshot. Please try again.', 'error');
+                    });
+                } else {
+                    // Fallback: Just save current view as image
+                    const section = document.querySelector('.price-chart-section');
+                    const htmlContent = section.innerHTML;
+                    const blob = new Blob([htmlContent], {type: 'text/html'});
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.download = `analysis-${new Date().toISOString().slice(0,10)}.html`;
+                    link.href = url;
+                    link.click();
+                    showToast('Snapshot saved as HTML!', 'success');
+                }
+            }, 500);
+        }
+        
+        // Show chart settings
+        function showChartSettings() {
+            const settings = {
+                theme: localStorage.getItem('chartTheme') || 'dark',
+                style: localStorage.getItem('chartStyle') || 'candles',
+                interval: localStorage.getItem('chartInterval') || '1H'
+            };
+            
+            const modalContent = `
+                <div class="modal-bg active" id="chart-settings-modal">
+                    <div class="modal">
+                        <div class="modal-header">
+                            <h3><i class="fas fa-sliders-h"></i> Chart Settings</h3>
+                            <button class="modal-close" onclick="document.getElementById('chart-settings-modal').remove()"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="modal-content">
+                            <div class="input-group">
+                                <label>Theme</label>
+                                <select id="chart-theme">
+                                    <option value="dark" ${settings.theme === 'dark' ? 'selected' : ''}>Dark</option>
+                                    <option value="light" ${settings.theme === 'light' ? 'selected' : ''}>Light</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Chart Style</label>
+                                <select id="chart-style">
+                                    <option value="candles" ${settings.style === 'candles' ? 'selected' : ''}>Candlesticks</option>
+                                    <option value="bars" ${settings.style === 'bars' ? 'selected' : ''}>Bars</option>
+                                    <option value="line" ${settings.style === 'line' ? 'selected' : ''}>Line</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Default Interval</label>
+                                <select id="chart-interval">
+                                    <option value="1" ${settings.interval === '1' ? 'selected' : ''}>1 Minute</option>
+                                    <option value="5" ${settings.interval === '5' ? 'selected' : ''}>5 Minutes</option>
+                                    <option value="15" ${settings.interval === '15' ? 'selected' : ''}>15 Minutes</option>
+                                    <option value="60" ${settings.interval === '60' ? 'selected' : ''}>1 Hour</option>
+                                    <option value="240" ${settings.interval === '240' ? 'selected' : ''}>4 Hours</option>
+                                    <option value="1D" ${settings.interval === '1D' ? 'selected' : ''}>1 Day</option>
+                                </select>
+                            </div>
+                            <button class="btn" onclick="saveChartSettings()">Save Settings</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalContent);
+        }
+        
+        // Save chart settings
+        window.saveChartSettings = function() {
+            const theme = document.getElementById('chart-theme').value;
+            const style = document.getElementById('chart-style').value;
+            const interval = document.getElementById('chart-interval').value;
+            
+            localStorage.setItem('chartTheme', theme);
+            localStorage.setItem('chartStyle', style);
+            localStorage.setItem('chartInterval', interval);
+            
+            document.getElementById('chart-settings-modal').remove();
+            showToast('Chart settings saved!', 'success');
+            
+            // Reload TradingView widget with new settings
+            if (window.tvWidget) {
+                window.tvWidget.remove();
+                initializeTradingViewChart();
+            }
+        };
+        
+        // Update TradingView widgets
+        function updateTradingViewWidgets(symbol) {
+            // Update main chart
+            if (window.tvWidget) {
+                window.tvWidget.setSymbol(symbol);
+            }
+            
+            // Update mini chart if it exists
+            const miniWidget = document.querySelector('#mini-tradingview-widget iframe');
+            if (miniWidget) {
+                const src = miniWidget.src;
+                const newSrc = src.replace(/symbol=[^&]*/, `symbol=${symbol}`);
+                miniWidget.src = newSrc;
+            }
+            
+            // Update economic calendar filter
+            updateCalendarFilter(symbol);
+        }
+        
+        // Update calendar filter based on selected pair
+        function updateCalendarFilter(symbol) {
+            const currencies = symbol.split('/');
+            const calendarToggle = document.getElementById('calendar-toggle');
+            
+            if (calendarToggle && calendarToggle.checked) {
+                // Filter calendar to show only events for the selected currencies
+                const calendarWidget = document.querySelector('#economic-calendar-widget iframe');
+                if (calendarWidget) {
+                    // Note: TradingView calendar widget doesn't support currency filtering directly
+                    // We can only show/hide the widget based on the toggle
+                    console.log(`Filtering calendar for currencies: ${currencies.join(', ')}`);
+                }
+            }
+        }
+        
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `cosmic-notification ${type}`;
+            toast.innerHTML = `
+                <div class="notification-icon">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">${type.toUpperCase()}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <button class="notification-close"><i class="fas fa-times"></i></button>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                toast.classList.add('fading');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+            
+            // Close button
+            toast.querySelector('.notification-close').addEventListener('click', () => {
+                toast.classList.add('fading');
+                setTimeout(() => toast.remove(), 300);
+            });
+        }
+        
+        // Update sidebar time
+        function updateSidebarTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            
+            document.getElementById('sidebar-current-time').textContent = `${hours}:${minutes}`;
+            document.getElementById('sidebar-timezone').textContent = timezone.split('/').pop();
+            
+            // Update active sessions
+            const activeSessions = document.querySelectorAll('.session-status.open').length;
+            document.getElementById('sidebar-active-sessions').textContent = activeSessions;
+        }
+        
+        // Update time every minute
+        setInterval(updateSidebarTime, 60000);
+        updateSidebarTime();
+        
+        // Initialize TradingView widgets if analyzer.js is loaded
+        if (window.CosmicAnalyzer) {
+            setTimeout(() => {
+                if (typeof window.CosmicAnalyzer.initializeWidgets === 'function') {
+                    window.CosmicAnalyzer.initializeWidgets();
+                }
+                
+                // Update session timeline
+                if (typeof window.CosmicAnalyzer.updateSessionTimeline === 'function') {
+                    window.CosmicAnalyzer.updateSessionTimeline();
+                    setInterval(window.CosmicAnalyzer.updateSessionTimeline, 60000);
+                }
+                
+                // Load filtered news
+                if (typeof window.loadFilteredNews === 'function') {
+                    window.loadFilteredNews();
+                }
+            }, 1500);
+        }
+
+        if (window.CosmicTools) {
+            window.CosmicTools.initializeTool('cosmic-analyzer');
+        }
+        
+        // Handle calendar toggle for pair-specific news
+        const calendarToggle = document.getElementById('calendar-toggle');
+        if (calendarToggle) {
+            calendarToggle.addEventListener('change', function() {
+                const isPairSpecific = this.checked;
+                const selectedPair = document.getElementById('currency-pair').value;
+                
+                if (isPairSpecific) {
+                    updateCalendarFilter(selectedPair);
+                    showToast(`Showing news for ${selectedPair} only`, 'info');
+                } else {
+                    showToast('Showing all market news', 'info');
+                }
+            });
+        }
+        
+        // Handle news refresh
+        const refreshNewsBtn = document.getElementById('refresh-news');
+        if (refreshNewsBtn) {
+            refreshNewsBtn.addEventListener('click', function() {
+                if (window.loadFilteredNews) {
+                    window.loadFilteredNews();
+                    showToast('Refreshing news...', 'info');
+                }
+            });
+        }
+    });
+    
+    // Initialize TradingView chart
+    function initializeTradingViewChart() {
+        const symbol = document.getElementById('currency-pair')?.value || 'EURUSD';
+        const container = document.getElementById('tradingview-chart');
+        
+        if (!container || window.tvWidget) return;
+        
+        const theme = localStorage.getItem('chartTheme') || 'dark';
+        const style = localStorage.getItem('chartStyle') || 'candles';
+        const interval = localStorage.getItem('chartInterval') || '60';
+        
+        window.tvWidget = new TradingView.widget({
+            container_id: "tradingview-chart",
+            symbol: symbol,
+            interval: interval,
+            theme: theme,
+            style: style,
+            toolbar_bg: '#1a1f25',
+            enable_publishing: false,
+            hide_side_toolbar: false,
+            allow_symbol_change: true,
+            details: true,
+            hotlist: true,
+            calendar: true,
+            studies: [
+                "MACD@tv-basicstudies",
+                "RSI@tv-basicstudies",
+                "Volume@tv-basicstudies"
+            ],
+            show_popup_button: true,
+            popup_width: "1000",
+            popup_height: "650",
+            locale: "en",
+            timezone: "exchange"
+        });
+    }
+</script>
+<script src="../../assets/js/news-filter.js"></script>
 </body>
 </html>
