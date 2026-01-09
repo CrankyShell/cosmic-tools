@@ -2,6 +2,9 @@
    COSMIC TOOLS - GLOBAL STYLES
    ============================ */
 
+/* Font Awesome Icons */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
 :root {
     /* Cosmic Theme Colors */
     --bg-dark: #0a0e14;
@@ -182,8 +185,10 @@ button {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-light);
-    padding: var(--space-md) 0;
+    padding: 8px 0 !important;
+    min-height: 60px !important;
 }
+
 
 .nav-container {
     max-width: 1200px;
@@ -193,6 +198,7 @@ button {
     justify-content: space-between;
     align-items: center;
     gap: var(--space-lg);
+    min-height: 44px !important;
 }
 
 .nav-logo {
@@ -202,7 +208,7 @@ button {
 }
 
 .nav-logo h1 {
-    font-size: 24px;
+    font-size: 20px !important;
     background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -211,7 +217,7 @@ button {
 }
 
 .nav-subtitle {
-    font-size: 12px;
+    font-size: 11px !important;
     color: var(--text-secondary);
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -227,10 +233,11 @@ button {
 .nav-link {
     color: var(--text-secondary);
     font-weight: 600;
-    padding: var(--space-sm) var(--space-md);
+    padding: 6px 10px !important;
     border-radius: var(--radius-md);
     transition: all var(--transition-normal);
     position: relative;
+    font-size: 13px !important;
 }
 
 .nav-link:hover,
