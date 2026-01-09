@@ -13,7 +13,288 @@
     <!-- Global styles -->
     <link rel="stylesheet" href="assets/css/main.css">
     
-    <!-- Tool-specific styles will be loaded dynamically -->
+    <style>
+        /* EXTREME COMPACT: Reduced sizes by 35% */
+        .hub-container {
+            padding: 15px 10px;
+        }
+        
+        /* Ultra Compact Hero */
+        .hero-section {
+            padding: 25px 15px;
+            margin-bottom: 20px;
+        }
+        
+        .hero-title {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .hero-subtitle {
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        
+        .hero-stats {
+            gap: 20px;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+        }
+        
+        /* Ultra Compact Tools Grid */
+        .tools-section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+        }
+        
+        .tools-grid {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .tool-card {
+            padding: 15px;
+        }
+        
+        .tool-icon {
+            width: 45px;
+            height: 45px;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+        
+        .tool-title {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .tool-description {
+            font-size: 13px;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        .tool-features {
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        
+        .tool-feature {
+            font-size: 11px;
+            padding: 3px 6px;
+        }
+        
+        .tool-btn {
+            padding: 10px 15px;
+            font-size: 13px;
+        }
+        
+        .status-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+        }
+        
+        /* Ultra Compact Features */
+        .features-section {
+            margin-bottom: 25px;
+        }
+        
+        .features-grid {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .feature-card {
+            padding: 15px;
+        }
+        
+        .feature-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+        
+        .feature-title {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .feature-description {
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        /* Ultra Compact Quick Access */
+        .quick-access-section {
+            margin-bottom: 25px;
+        }
+        
+        .quick-access-grid {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .quick-access-card {
+            padding: 15px;
+            gap: 12px;
+        }
+        
+        .quick-access-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+        }
+        
+        .quick-access-content h4 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .quick-access-content p {
+            font-size: 12px;
+            line-height: 1.3;
+        }
+        
+        /* Compact Navigation */
+        .nav-container {
+            padding: 0 10px;
+        }
+        
+        .nav-logo h1 {
+            font-size: 20px;
+        }
+        
+        .nav-subtitle {
+            font-size: 11px;
+        }
+        
+        .nav-link {
+            padding: 6px 10px;
+            font-size: 13px;
+        }
+        
+        /* Compact Footer */
+        .footer-content {
+            padding: 0 10px;
+            margin-bottom: 15px;
+        }
+        
+        .footer-brand h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        
+        .footer-brand p {
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+        
+        .footer-social {
+            gap: 12px;
+        }
+        
+        .social-link {
+            font-size: 13px;
+        }
+        
+        .footer-links {
+            gap: 15px;
+        }
+        
+        .footer-column h4 {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .footer-column a {
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+        
+        .footer-bottom {
+            padding: 12px 10px;
+            font-size: 12px;
+        }
+        
+        .footer-note {
+            font-size: 11px;
+            margin-top: 6px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 24px;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .stat-value {
+                font-size: 18px;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-access-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-section {
+                padding: 20px 10px;
+            }
+            
+            .hero-title {
+                font-size: 22px;
+            }
+            
+            .hero-subtitle {
+                font-size: 13px;
+            }
+            
+            .tool-card {
+                padding: 12px;
+            }
+            
+            .feature-card {
+                padding: 12px;
+            }
+            
+            .quick-access-card {
+                padding: 12px;
+            }
+            
+            .hub-container {
+                padding: 10px 8px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Cosmic background -->
@@ -23,29 +304,29 @@
     <nav class="global-nav">
         <div class="nav-container">
             <div class="nav-logo">
-                <h1>Cosmic Tools</h1>
+                <h1><i class="fas fa-rocket"></i> Cosmic Tools</h1>
                 <div class="nav-subtitle">Trading Tools Hub</div>
             </div>
             
             <div class="nav-links">
-                <a href="index.html" class="nav-link active">Home</a>
-                <a href="tools/cosmic-journal/index.html" class="nav-link">Cosmic Journal</a>
-                <a href="tools/cosmic-analyzer/index.html" class="nav-link">Cosmic Analyzer</a>
-                <a href="about.html" class="nav-link">About</a>
-                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Home</a>
+                <a href="tools/cosmic-journal/index.html" class="nav-link"><i class="fas fa-book"></i> Cosmic Journal</a>
+                <a href="tools/cosmic-analyzer/index.html" class="nav-link"><i class="fas fa-chart-line"></i> Cosmic Analyzer</a>
+                <a href="about.html" class="nav-link"><i class="fas fa-info-circle"></i> About</a>
+                <a href="contact.html" class="nav-link"><i class="fas fa-envelope"></i> Contact</a>
             </div>
             
-            <button class="nav-menu-btn" id="mobile-menu-btn">☰</button>
+            <button class="nav-menu-btn" id="mobile-menu-btn"><i class="fas fa-bars"></i></button>
         </div>
     </nav>
     
     <!-- Mobile Navigation -->
     <div class="mobile-nav" id="mobile-nav">
-        <a href="index.html" class="mobile-nav-link active">Home</a>
-        <a href="tools/cosmic-journal/index.html" class="mobile-nav-link">Cosmic Journal</a>
-        <a href="tools/cosmic-analyzer/index.html" class="nav-link">Cosmic Analyzer</a>
-        <a href="about.html" class="mobile-nav-link">About</a>
-        <a href="contact.html" class="mobile-nav-link">Contact</a>
+        <a href="index.html" class="mobile-nav-link active"><i class="fas fa-home"></i> Home</a>
+        <a href="tools/cosmic-journal/index.html" class="mobile-nav-link"><i class="fas fa-book"></i> Cosmic Journal</a>
+        <a href="tools/cosmic-analyzer/index.html" class="mobile-nav-link"><i class="fas fa-chart-line"></i> Cosmic Analyzer</a>
+        <a href="about.html" class="mobile-nav-link"><i class="fas fa-info-circle"></i> About</a>
+        <a href="contact.html" class="mobile-nav-link"><i class="fas fa-envelope"></i> Contact</a>
     </div>
     
     <!-- Main Content -->
@@ -54,19 +335,19 @@
         <section class="hero-section">
             <div class="hero-content">
                 <h2 class="hero-title">Cosmic Tools</h2>
-                <p class="hero-subtitle">A suite of powerful trading tools designed to elevate your trading journey</p>
+                <p class="hero-subtitle">Professional trading tools designed for serious traders</p>
                 <div class="hero-stats">
                     <div class="stat-item">
                         <div class="stat-value">2+</div>
-                        <div class="stat-label">Tools</div>
+                        <div class="stat-label">Professional Tools</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-value">100%</div>
-                        <div class="stat-label">Free</div>
+                        <div class="stat-label">Free Access</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-value">24/7</div>
-                        <div class="stat-label">Access</div>
+                        <div class="stat-label">Available</div>
                     </div>
                 </div>
             </div>
@@ -74,80 +355,78 @@
         
         <!-- Tools Grid -->
         <section class="tools-section">
-            <h3 class="section-title">Available Tools</h3>
+            <h3 class="section-title"><i class="fas fa-tools"></i> Available Tools</h3>
             
             <div class="tools-grid">
                 <!-- Cosmic Journal Tool -->
                 <div class="tool-card">
                     <div class="tool-icon" style="background: linear-gradient(135deg, #00ffb3 0%, #00cc99 100%);">
-                        📓
+                        <i class="fas fa-book"></i>
                     </div>
                     <div class="tool-content">
                         <h4 class="tool-title">Cosmic Journal</h4>
                         <p class="tool-description">
                             Advanced trading journal with analytics, equity curve visualization, and performance tracking.
-                            Perfect for monitoring your trading journey.
                         </p>
                         <div class="tool-features">
-                            <span class="tool-feature">📊 Analytics</span>
-                            <span class="tool-feature">📈 Equity Curve</span>
-                            <span class="tool-feature">🗓️ Calendar View</span>
+                            <span class="tool-feature"><i class="fas fa-chart-bar"></i> Analytics</span>
+                            <span class="tool-feature"><i class="fas fa-chart-line"></i> Equity Curve</span>
+                            <span class="tool-feature"><i class="fas fa-calendar"></i> Calendar</span>
                         </div>
                         <a href="tools/cosmic-journal/index.html" class="tool-btn">
-                            Open Journal →
+                            <i class="fas fa-external-link-alt"></i> Open Journal
                         </a>
                     </div>
                     <div class="tool-status">
-                        <span class="status-badge active">Active</span>
+                        <span class="status-badge active"><i class="fas fa-check-circle"></i> Active</span>
                     </div>
                 </div>
                 
-                <!-- Cosmic Analyzer (Now Available) -->
-<div class="tool-card">
-    <div class="tool-icon" style="background: linear-gradient(135deg, #3b7cff 0%, #2d6aff 100%);">
-        🔍
-    </div>
-    <div class="tool-content">
-        <h4 class="tool-title">Cosmic Analyzer</h4>
-        <p class="tool-description">
-            Market analysis tool with live session tracking, price action analysis, and economic calendar.
-            Get your daily market overview in under 60 seconds.
-        </p>
-        <div class="tool-features">
-            <span class="tool-feature">🕒 Session Tracker</span>
-            <span class="tool-feature">📈 Price Analysis</span>
-            <span class="tool-feature">📅 Calendar</span>
-        </div>
-        <a href="tools/cosmic-analyzer/index.html" class="tool-btn">
-            Open Analyzer →
-        </a>
-    </div>
-    <div class="tool-status">
-        <span class="status-badge active">Active</span>
-    </div>
-</div>
+                <!-- Cosmic Analyzer -->
+                <div class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #3b7cff 0%, #2d6aff 100%);">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="tool-content">
+                        <h4 class="tool-title">Cosmic Analyzer</h4>
+                        <p class="tool-description">
+                            Market analysis with live session tracking, price action analysis, and economic calendar.
+                        </p>
+                        <div class="tool-features">
+                            <span class="tool-feature"><i class="fas fa-clock"></i> Session Tracker</span>
+                            <span class="tool-feature"><i class="fas fa-chart-candlestick"></i> Price Analysis</span>
+                            <span class="tool-feature"><i class="fas fa-calendar-alt"></i> Calendar</span>
+                        </div>
+                        <a href="tools/cosmic-analyzer/index.html" class="tool-btn">
+                            <i class="fas fa-external-link-alt"></i> Open Analyzer
+                        </a>
+                    </div>
+                    <div class="tool-status">
+                        <span class="status-badge active"><i class="fas fa-check-circle"></i> Active</span>
+                    </div>
+                </div>
+                
                 <!-- Risk Calculator (Coming Soon) -->
                 <div class="tool-card">
                     <div class="tool-icon" style="background: linear-gradient(135deg, #9d4edd 0%, #7b2cbf 100%);">
-                        ⚖️
+                        <i class="fas fa-calculator"></i>
                     </div>
                     <div class="tool-content">
                         <h4 class="tool-title">Risk Calculator</h4>
                         <p class="tool-description">
-                            Position sizing and risk management calculator. Calculate optimal position sizes based on your
-                            account size and risk tolerance.
+                            Position sizing and risk management calculator for optimal position sizes.
                         </p>
                         <div class="tool-features">
-                            <span class="tool-feature">📊 Position Sizing</span>
-                            <span class="tool-feature">🛡️ Risk Management</span>
-                            <span class="tool-feature">🎯 RR Calculator</span>
+                            <span class="tool-feature"><i class="fas fa-chart-pie"></i> Position Sizing</span>
+                            <span class="tool-feature"><i class="fas fa-shield-alt"></i> Risk Management</span>
+                            <span class="tool-feature"><i class="fas fa-bullseye"></i> RR Calculator</span>
                         </div>
                         <button class="tool-btn disabled" disabled>
-                            Coming Soon
+                            <i class="fas fa-clock"></i> Coming Soon
                         </button>
                     </div>
                     <div class="tool-status">
-                        <span class="status-badge soon">Coming Soon</span>
+                        <span class="status-badge soon"><i class="fas fa-clock"></i> Coming Soon</span>
                     </div>
                 </div>
             </div>
@@ -155,38 +434,38 @@
         
         <!-- Features Section -->
         <section class="features-section">
-            <h3 class="section-title">Why Choose Cosmic Tools?</h3>
+            <h3 class="section-title"><i class="fas fa-star"></i> Why Choose Cosmic Tools?</h3>
             
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">🚀</div>
+                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
                     <h4 class="feature-title">Performance Focused</h4>
                     <p class="feature-description">
-                        Tools optimized for speed and efficiency. No unnecessary bloat, just what traders need.
+                        Optimized for speed and efficiency with no unnecessary bloat.
                     </p>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">🔗</div>
+                    <div class="feature-icon"><i class="fas fa-link"></i></div>
                     <h4 class="feature-title">Integrated Ecosystem</h4>
                     <p class="feature-description">
-                        All tools work together seamlessly. Share data between tools for a unified trading experience.
+                        Tools work together seamlessly for unified trading experience.
                     </p>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">📱</div>
+                    <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
                     <h4 class="feature-title">Mobile First</h4>
                     <p class="feature-description">
-                        Works perfectly on all devices. Trade and analyze from anywhere, anytime.
+                        Works perfectly on all devices from anywhere, anytime.
                     </p>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
+                    <div class="feature-icon"><i class="fas fa-lock"></i></div>
                     <h4 class="feature-title">Privacy First</h4>
                     <p class="feature-description">
-                        Your data stays on your device. No cloud storage required unless you choose to.
+                        Your data stays on your device. No cloud required.
                     </p>
                 </div>
             </div>
@@ -194,38 +473,38 @@
         
         <!-- Quick Access -->
         <section class="quick-access-section">
-            <h3 class="section-title">Quick Access</h3>
+            <h3 class="section-title"><i class="fas fa-bolt"></i> Quick Access</h3>
             
             <div class="quick-access-grid">
-                <a href="tools/cosmic-journal/index.html#add" class="quick-access-card">
-                    <div class="quick-access-icon">➕</div>
+                <a href="tools/cosmic-journal/index.html" class="quick-access-card">
+                    <div class="quick-access-icon"><i class="fas fa-plus"></i></div>
                     <div class="quick-access-content">
                         <h4>Add New Trade</h4>
                         <p>Quickly log a new trade in the journal</p>
                     </div>
                 </a>
                 
-                <a href="tools/cosmic-journal/index.html#view" class="quick-access-card">
-                    <div class="quick-access-icon">👁️</div>
+                <a href="tools/cosmic-journal/index.html" class="quick-access-card">
+                    <div class="quick-access-icon"><i class="fas fa-eye"></i></div>
                     <div class="quick-access-content">
                         <h4>View Trades</h4>
                         <p>Review and analyze your trading history</p>
                     </div>
                 </a>
                 
-                <a href="tools/cosmic-journal/index.html#analytics" class="quick-access-card">
-                    <div class="quick-access-icon">📊</div>
+                <a href="tools/cosmic-analyzer/index.html" class="quick-access-card">
+                    <div class="quick-access-icon"><i class="fas fa-chart-line"></i></div>
                     <div class="quick-access-content">
-                        <h4>Performance Analytics</h4>
-                        <p>Check your trading statistics and metrics</p>
+                        <h4>Market Analysis</h4>
+                        <p>Get real-time market insights</p>
                     </div>
                 </a>
                 
-                <a href="tools/cosmic-journal/index.html#accounts" class="quick-access-card">
-                    <div class="quick-access-icon">👤</div>
+                <a href="tools/cosmic-analyzer/index.html" class="quick-access-card">
+                    <div class="quick-access-icon"><i class="fas fa-calendar-alt"></i></div>
                     <div class="quick-access-content">
-                        <h4>Account Management</h4>
-                        <p>Manage your trading accounts</p>
+                        <h4>Economic Calendar</h4>
+                        <p>Check upcoming market events</p>
                     </div>
                 </a>
             </div>
@@ -236,42 +515,42 @@
     <footer class="global-footer">
         <div class="footer-content">
             <div class="footer-brand">
-                <h3>Cosmic Tools</h3>
+                <h3><i class="fas fa-rocket"></i> Cosmic Tools</h3>
                 <p>Trading Tools Hub</p>
                 <div class="footer-social">
-                    <a href="#" class="social-link">Twitter</a>
-                    <a href="#" class="social-link">Instagram</a>
-                    <a href="#" class="social-link">Discord</a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i> Twitter</a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a href="#" class="social-link"><i class="fab fa-discord"></i> Discord</a>
                 </div>
             </div>
             
             <div class="footer-links">
                 <div class="footer-column">
-                    <h4>Tools</h4>
-                    <a href="tools/cosmic-journal/index.html">Cosmic Journal</a>
-                    <a href="#">Cosmic Analyzer</a>
-                    <a href="#">Risk Calculator</a>
+                    <h4><i class="fas fa-tools"></i> Tools</h4>
+                    <a href="tools/cosmic-journal/index.html"><i class="fas fa-book"></i> Cosmic Journal</a>
+                    <a href="tools/cosmic-analyzer/index.html"><i class="fas fa-chart-line"></i> Cosmic Analyzer</a>
+                    <a href="#"><i class="fas fa-calculator"></i> Risk Calculator</a>
                 </div>
                 
                 <div class="footer-column">
-                    <h4>Resources</h4>
-                    <a href="about.html">About</a>
-                    <a href="contact.html">Contact</a>
-                    <a href="#">Documentation</a>
+                    <h4><i class="fas fa-book"></i> Resources</h4>
+                    <a href="about.html"><i class="fas fa-info-circle"></i> About</a>
+                    <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
+                    <a href="#"><i class="fas fa-file-alt"></i> Documentation</a>
                 </div>
                 
                 <div class="footer-column">
-                    <h4>Legal</h4>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Disclaimer</a>
+                    <h4><i class="fas fa-gavel"></i> Legal</h4>
+                    <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+                    <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+                    <a href="#"><i class="fas fa-exclamation-triangle"></i> Disclaimer</a>
                 </div>
             </div>
         </div>
         
         <div class="footer-bottom">
-            <p>© 2024 Cosmic Tools v1.0 | Created with ❤️ for traders</p>
-            <p class="footer-note">Risk Disclaimer: Trading involves risk. Past performance is not indicative of future results.</p>
+            <p><i class="fas fa-copyright"></i> 2024 Cosmic Tools v1.0 | Created with <i class="fas fa-heart" style="color: var(--accent-danger);"></i> for traders</p>
+            <p class="footer-note"><i class="fas fa-exclamation-circle"></i> Risk Disclaimer: Trading involves risk. Past performance is not indicative of future results.</p>
         </div>
     </footer>
     
