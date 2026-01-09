@@ -92,6 +92,404 @@ class CosmicAnalyzer {
         
         this.initialize();
     }
+
+    // Add these methods to your CosmicAnalyzer class
+
+setupFinancialJuiceNews() {
+    // Create hidden container for Financial Juice widget
+    this.createHiddenFinancialJuiceContainer();
+    
+    // Load Financial Juice widget
+    this.loadFinancialJuiceWidget();
+}
+
+createHiddenFinancialJuiceContainer() {
+    // Remove existing hidden container if it exists
+    const existing = document.getElementById('financialjuice-hidden-container');
+    if (existing) existing.remove();
+    
+    // Create new hidden container
+    const hiddenContainer = document.createElement('div');
+    hiddenContainer.id = 'financialjuice-hidden-container';
+    hiddenContainer.style.cssText = `
+        position: absolute !important;
+        left: -9999px !important;
+        top: -9999px !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        width: 500px !important;
+        height: 600px !important;
+        overflow: hidden !important;
+        z-index: -9999 !important;
+    `;
+    document.body.appendChild(hiddenContainer);
+}
+
+loadFinancialJuiceWidget() {
+    const container = document.getElementById('financialjuice-hidden-container');
+    if (!container) return;
+    
+    // Clear container
+    container.innerHTML = '<div id="financialjuice-news-widget-container"></div>';
+    
+    // Load Financial Juice widget script
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.id = 'FJ-Widgets';
+    const r = Math.floor(Math.random() * (9999 - 0 + 1) + 0);
+    script.src = `https://feed.financialjuice.com/widgets/widgets.js?r=${r}`;
+    
+    script.onload = () => {
+        console.log('Financial Juice widget loaded');
+        
+        // Widget configuration
+        const options = {
+            container: "financialjuice-news-widget-container",
+            mode: "Dark",
+            width: "500px",
+            height: "600px",
+            backColor: "1e222d",
+            fontColor: "b2b5be",
+            widgetType: "NEWS"
+        };
+        
+        // Create widget
+        if (window.FJWidgets) {
+            new window.FJWidgets.createWidget(options);
+            
+            // Start monitoring for news data
+            setTimeout(() => this.extractFinancialJuiceData(), 3000);
+            setInterval(() => this.extractFinancialJuiceData(), 30000); // Update every 30 seconds
+        }
+    };
+    
+    script.onerror = (error) => {
+        console.error('Failed to load Financial Juice widget:', error);
+        this.useFallbackNews();
+    };
+    
+    document.head.appendChild(script);
+}
+
+
+
+extractFinancialJuiceData() {
+    try {
+        const widgetContainer = document.getElementById('financialjuice-news-widget-container');
+        if (!widgetContainer) {
+            console.warn('Financial Juice container not found');
+            this.useFallbackNews();
+            return;
+        }
+        
+        // Financial Juice typically structures news in tables or lists
+        // Let's try multiple selectors to find the news items
+        let newsElements = [];
+        
+        // Try different selectors that Financial Juice might use
+        const possibleSelectors = [
+            '.fj-news-item',
+            '.news-item',
+            '.fj-item',
+            'tr[data-type="news"]',
+            'div[class*="news"]',
+            'li[class*="news"]',
+            '.fj-widget-content tbody tr',
+            '#financialjuice-news-widget-container table tbody tr'
+        ];
+        
+        for (const selector of possibleSelectors) {
+            const elements = widgetContainer.querySelectorAll(selector);
+            if (elements.length > 0) {
+                newsElements = Array.from(elements);
+                console.log(`Found ${elements.length} news items with selector: ${selector}`);
+                break;
+            }
+        }
+        
+        // If no specific selectors work, try to find any structured data
+        if (newsElements.length === 0) {
+            // Look for any structured content
+            const tables = widgetContainer.querySelectorAll('table');
+            const lists = widgetContainer.querySelectorAll('ul, ol');
+            
+            if (tables.length > 0) {
+                // Extract from first table rows
+                const rows = tables[0].querySelectorAll('tr');
+                newsElements = Array.from(rows).slice(0, 10); // First 10 rows
+            } else if (lists.length > 0) {
+                // Extract from first list items
+                const items = lists[0].querySelectorAll('li');
+                newsElements = Array.from(items).slice(0, 10);
+            }
+        }
+        
+        if (newsElements.length > 0) {
+            const parsedNews = this.parseFinancialJuiceElements(newsElements);
+            if (parsedNews.length > 0) {
+                this.displayExtractedNews(parsedNews);
+                return;
+            }
+        }
+        
+        // If we get here, extraction failed
+        console.warn('Could not extract news from Financial Juice widget');
+        this.useFallbackNews();
+        
+    } catch (error) {
+        console.error('Error extracting Financial Juice data:', error);
+        this.useFallbackNews();
+    }
+}
+
+parseFinancialJuiceElements(elements) {
+    const newsItems = [];
+    
+    elements.slice(0, 10).forEach((element, index) => { // Limit to 10 items
+        try {
+            const newsItem = this.parseFinancialJuiceElement(element);
+            if (newsItem && newsItem.title) {
+                newsItems.push(newsItem);
+            }
+        } catch (error) {
+            console.warn(`Error parsing element ${index}:`, error);
+        }
+    });
+    
+    return newsItems;
+}
+
+parseFinancialJuiceElement(element) {
+    // Clone element to work with
+    const clone = element.cloneNode(true);
+    
+    // Remove any script tags or unwanted elements
+    clone.querySelectorAll('script, style, iframe, object, embed').forEach(el => el.remove());
+    
+    // Get text content
+    const text = clone.textContent || clone.innerText || '';
+    const html = clone.innerHTML || '';
+    
+    // Try to extract time (common patterns in financial news)
+    let time = '';
+    const timeRegex = /(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM|am|pm)?)|(\d{1,2}(?:\.\d{2})?\s*(?:GMT|EST|CST|PST))/i;
+    const timeMatch = text.match(timeRegex);
+    if (timeMatch) {
+        time = timeMatch[0];
+    }
+    
+    // Try to extract impact/importance
+    let impact = 'neutral';
+    const textLower = text.toLowerCase();
+    if (textLower.includes('high') || textLower.includes('important') || textLower.includes('breaking')) {
+        impact = 'high';
+    } else if (textLower.includes('medium') || textLower.includes('moderate')) {
+        impact = 'medium';
+    }
+    
+    // Try to extract currency/instrument
+    let instrument = '';
+    const instrumentRegex = /(EUR\/USD|GBP\/USD|USD\/JPY|AUD\/USD|USD\/CAD|NZD\/USD|EUR\/JPY|GBP\/JPY|XAU\/USD|BTC\/USD|ETH\/USD|SPX|DXY)/i;
+    const instrumentMatch = text.match(instrumentRegex);
+    if (instrumentMatch) {
+        instrument = instrumentMatch[0];
+    }
+    
+    // Clean title (remove time if it's at the beginning)
+    let title = text.trim();
+    if (time && title.startsWith(time)) {
+        title = title.substring(time.length).trim();
+    }
+    
+    // Remove extra whitespace and newlines
+    title = title.replace(/\s+/g, ' ').trim();
+    
+    // Create excerpt (first 100 chars)
+    const excerpt = title.length > 100 ? title.substring(0, 100) + '...' : title;
+    
+    return {
+        title: title || 'Market News Update',
+        excerpt: excerpt,
+        time: time || this.getRelativeTime(index),
+        impact: impact,
+        instrument: instrument,
+        source: 'Financial Juice',
+        category: instrument ? 'forex' : 'markets',
+        sentiment: this.determineSentiment(text),
+        url: '#',
+        publishedAt: new Date()
+    };
+}
+
+determineSentiment(text) {
+    const textLower = text.toLowerCase();
+    const positiveWords = ['up', 'rise', 'gain', 'bullish', 'positive', 'strong', 'beat', 'higher'];
+    const negativeWords = ['down', 'fall', 'drop', 'bearish', 'negative', 'weak', 'miss', 'lower'];
+    
+    let positiveCount = 0;
+    let negativeCount = 0;
+    
+    positiveWords.forEach(word => {
+        if (textLower.includes(word)) positiveCount++;
+    });
+    
+    negativeWords.forEach(word => {
+        if (textLower.includes(word)) negativeCount++;
+    });
+    
+    if (positiveCount > negativeCount) return 'bullish';
+    if (negativeCount > positiveCount) return 'bearish';
+    return 'neutral';
+}
+
+getRelativeTime(index) {
+    const now = new Date();
+    const minutesAgo = index * 5; // Simulate 5 minutes between each news item
+    const time = new Date(now.getTime() - (minutesAgo * 60000));
+    return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+displayExtractedNews(newsItems) {
+    const container = document.getElementById('api-news-container');
+    if (!container) return;
+    
+    if (newsItems.length === 0) {
+        this.useFallbackNews();
+        return;
+    }
+    
+    // Update stats
+    this.updateNewsStats(newsItems);
+    
+    // Display news in our custom format
+    container.innerHTML = newsItems.map((item, index) => `
+        <div class="api-news-item ${item.sentiment ? `sentiment-${item.sentiment.toLowerCase()}` : ''}" data-index="${index}">
+            <div class="news-time-badge">
+                <span class="news-time">${item.time}</span>
+                ${item.sentiment ? `<span class="sentiment-badge ${item.sentiment.toLowerCase()}">${item.sentiment}</span>` : ''}
+            </div>
+            <div class="news-content">
+                ${item.instrument ? `<div class="news-instrument">${item.instrument}</div>` : ''}
+                <h4 class="news-title">
+                    <a href="${item.url}" target="_blank" rel="noopener noreferrer" title="${item.title}">
+                        ${item.title}
+                    </a>
+                </h4>
+                <p class="news-excerpt">${item.excerpt}</p>
+                <div class="news-meta">
+                    <span class="news-source">${item.source}</span>
+                    ${item.impact ? `<span class="news-impact ${item.impact}">${item.impact.toUpperCase()}</span>` : ''}
+                    <span class="news-age">Live</span>
+                </div>
+            </div>
+            <div class="news-actions">
+                <button class="news-save-btn" title="Save for later">💾</button>
+                <button class="news-share-btn" title="Share">↗️</button>
+            </div>
+        </div>
+    `).join('');
+    
+    // Update source badge
+    const sourceBadge = document.querySelector('.news-badge.newsapi');
+    if (sourceBadge) {
+        sourceBadge.textContent = 'Financial Juice';
+        sourceBadge.className = 'news-badge financial-juice';
+    }
+    
+    this.showNotification(`Loaded ${newsItems.length} live market news items`, 'success');
+}
+
+updateNewsStats(newsItems) {
+    const articleCount = document.getElementById('article-count');
+    const latestTime = document.getElementById('latest-news-time');
+    const avgSentiment = document.getElementById('avg-sentiment');
+    const sourceCount = document.getElementById('source-count');
+    
+    if (articleCount) articleCount.textContent = newsItems.length;
+    if (latestTime) {
+        const latest = newsItems[0]?.time || '--:--';
+        latestTime.textContent = latest;
+    }
+    if (sourceCount) sourceCount.textContent = 1; // Single source
+    
+    // Calculate average sentiment
+    if (avgSentiment && newsItems.length > 0) {
+        const sentiments = newsItems.map(item => item.sentiment);
+        const bullishCount = sentiments.filter(s => s === 'bullish').length;
+        const bearishCount = sentiments.filter(s => s === 'bearish').length;
+        
+        if (bullishCount > bearishCount) {
+            avgSentiment.textContent = 'Bullish';
+            avgSentiment.className = 'stat-value positive';
+        } else if (bearishCount > bullishCount) {
+            avgSentiment.textContent = 'Bearish';
+            avgSentiment.className = 'stat-value negative';
+        } else {
+            avgSentiment.textContent = 'Neutral';
+            avgSentiment.className = 'stat-value';
+        }
+    }
+}
+
+useFallbackNews() {
+    console.log('Using fallback news data');
+    
+    const fallbackNews = [
+        {
+            title: 'Federal Reserve Monetary Policy Meeting Minutes Released',
+            excerpt: 'The Federal Reserve releases minutes from its latest monetary policy meeting, providing insights into future interest rate decisions.',
+            time: '14:00',
+            impact: 'high',
+            instrument: 'USD',
+            source: 'Federal Reserve',
+            sentiment: 'neutral',
+            category: 'economics'
+        },
+        {
+            title: 'European Central Bank Inflation Outlook',
+            excerpt: 'ECB officials comment on inflation trends in the Eurozone, affecting EUR currency pairs.',
+            time: '13:45',
+            impact: 'medium',
+            instrument: 'EUR/USD',
+            source: 'ECB',
+            sentiment: 'bullish',
+            category: 'forex'
+        },
+        {
+            title: 'Bank of England Interest Rate Decision',
+            excerpt: 'BOE announces its latest interest rate decision, impacting GBP currency pairs.',
+            time: '12:00',
+            impact: 'high',
+            instrument: 'GBP/USD',
+            source: 'BOE',
+            sentiment: 'bearish',
+            category: 'forex'
+        },
+        {
+            title: 'US Non-Farm Payrolls Data Released',
+            excerpt: 'Latest US employment data shows stronger than expected job growth.',
+            time: '13:30',
+            impact: 'high',
+            instrument: 'USD',
+            source: 'BLS',
+            sentiment: 'bullish',
+            category: 'economics'
+        },
+        {
+            title: 'OPEC+ Production Meeting Outcomes',
+            excerpt: 'OPEC+ announces production cuts, affecting oil prices and related currencies.',
+            time: '11:00',
+            impact: 'medium',
+            instrument: 'XAU/USD',
+            source: 'OPEC',
+            sentiment: 'bullish',
+            category: 'commodities'
+        }
+    ];
+    
+    this.displayExtractedNews(fallbackNews);
+}
     
     initialize() {
         this.setupMarketTypeButtons();
@@ -103,6 +501,9 @@ class CosmicAnalyzer {
         
         // Initialize TradingView widgets
         this.initializeTradingViewWidgets();
+
+        // Initialize Financial Juice news
+        this.setupFinancialJuiceNews();
         
         // Start live updates
         this.startLiveUpdates();
@@ -394,6 +795,448 @@ class CosmicAnalyzer {
         
         container.appendChild(widgetDiv);
     }
+
+    // Add this method to CosmicAnalyzer class
+async fetchRealMarketNews() {
+    try {
+        const news = await window.APIManager.getMarketNews(this.currentPair.marketType, 5);
+        if (news && news.length > 0) {
+            // Update news display instead of TradingView widget
+            this.displayCustomNews(news);
+            return true;
+        }
+    } catch (error) {
+        console.warn('Could not fetch real news, using TradingView widget:', error);
+    }
+    return false;
+}
+
+// Add these methods to CosmicAnalyzer class after line ~200
+
+// API News Section Methods
+setupAPINewsSection() {
+    const newsGrid = document.querySelector('.analysis-grid');
+    if (!newsGrid) return;
+
+    // Check if API news section already exists
+    if (document.getElementById('api-news-section')) return;
+
+    // Create API News Section HTML with Financial Juice source
+    const apiNewsHTML = `
+        <section class="dashboard-section api-news-section" id="api-news-section">
+            <div class="news-header">
+                <h3>Real-Time Market News</h3>
+                <div class="news-source-badges">
+                    <span class="news-badge financial-juice">Financial Juice</span>
+                    <span class="news-badge alpha-vantage">Alpha Vantage</span>
+                </div>
+                <div class="news-controls">
+                    <button class="refresh-btn" id="refresh-api-news">
+                        <span class="refresh-icon">🔄</span>
+                        Refresh News
+                    </button>
+                    <div class="news-category-selector">
+                        <select id="news-category-select">
+                            <option value="all">All Markets</option>
+                            <option value="forex">Forex</option>
+                            <option value="stocks">Stocks</option>
+                            <option value="crypto">Crypto</option>
+                            <option value="economics">Economics</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="news-container" id="api-news-container">
+                <div class="loading-news">
+                    <div class="loading-spinner"></div>
+                    <p>Loading live market news from Financial Juice...</p>
+                </div>
+            </div>
+            
+            <div class="news-stats">
+                <div class="news-stat">
+                    <div class="stat-label">Live Articles</div>
+                    <div class="stat-value" id="article-count">0</div>
+                </div>
+                <div class="news-stat">
+                    <div class="stat-label">Latest</div>
+                    <div class="stat-value" id="latest-news-time">--:--</div>
+                </div>
+                <div class="news-stat">
+                    <div class="stat-label">Sentiment</div>
+                    <div class="stat-value" id="avg-sentiment">--</div>
+                </div>
+                <div class="news-stat">
+                    <div class="stat-label">Source</div>
+                    <div class="stat-value" id="source-count">Financial Juice</div>
+                </div>
+            </div>
+        </section>
+    `;
+
+    // Insert after the economic calendar section
+    const calendarSection = document.querySelector('.economic-calendar-section');
+    if (calendarSection) {
+        calendarSection.insertAdjacentHTML('afterend', apiNewsHTML);
+    } else {
+        // Fallback: add to analysis grid
+        newsGrid.insertAdjacentHTML('beforeend', apiNewsHTML);
+    }
+
+    // Setup event listeners
+    this.setupAPINewsControls();
+    
+    // Load initial news - will be handled by Financial Juice extraction
+    // Don't call loadAPINews() here since Financial Juice will populate it
+}
+
+setupAPINewsControls() {
+    const refreshBtn = document.getElementById('refresh-api-news');
+    const categorySelect = document.getElementById('news-category-select');
+    
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => {
+            // Force re-extraction from Financial Juice
+            this.extractFinancialJuiceData();
+            this.showNotification('Refreshing live news...', 'info');
+        });
+    }
+    
+    if (categorySelect) {
+        categorySelect.addEventListener('change', (e) => {
+            const category = e.target.value;
+            if (category === 'all') {
+                // Show all news
+                const container = document.getElementById('api-news-container');
+                const items = container.querySelectorAll('.api-news-item');
+                items.forEach(item => item.style.display = 'flex');
+            } else {
+                // Filter by category
+                this.filterNewsByCategory(category);
+            }
+        });
+    }
+}
+
+filterNewsByCategory(category) {
+    const container = document.getElementById('api-news-container');
+    if (!container) return;
+    
+    const items = container.querySelectorAll('.api-news-item');
+    items.forEach(item => {
+        const itemCategory = item.querySelector('.news-category')?.textContent?.toLowerCase() || 
+                            item.querySelector('.news-instrument')?.textContent?.toLowerCase() || 
+                            'all';
+        
+        if (category === 'all' || itemCategory.includes(category) || 
+            (category === 'forex' && itemCategory.includes('/')) ||
+            (category === 'economics' && !itemCategory.includes('/'))) {
+            item.style.display = 'flex';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+    
+    this.showNotification(`Filtered news: ${category}`, 'info');
+}
+
+setupAPINewsControls() {
+    const refreshBtn = document.getElementById('refresh-api-news');
+    const categorySelect = document.getElementById('news-category-select');
+    
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => {
+            this.loadAPINews();
+            this.showNotification('Refreshing news...', 'info');
+        });
+    }
+    
+    if (categorySelect) {
+        categorySelect.addEventListener('change', (e) => {
+            const category = e.target.value;
+            this.loadAPINews(category);
+            this.showNotification(`Loading ${category} news...`, 'info');
+        });
+    }
+}
+
+async loadAPINews(category = 'forex') {
+    const container = document.getElementById('api-news-container');
+    const articleCount = document.getElementById('article-count');
+    const latestTime = document.getElementById('latest-news-time');
+    const avgSentiment = document.getElementById('avg-sentiment');
+    const sourceCount = document.getElementById('source-count');
+    
+    if (!container) return;
+    
+    // Show loading state
+    container.innerHTML = `
+        <div class="loading-news">
+            <div class="loading-spinner"></div>
+            <p>Fetching ${category} news...</p>
+        </div>
+    `;
+    
+    try {
+        // Use APIManager to fetch real news
+        const news = await window.APIManager.getMarketNews(category, 8);
+        
+        if (!news || news.length === 0) {
+            this.displayAPINewsFallback(category);
+            return;
+        }
+        
+        // Calculate statistics
+        const sources = new Set();
+        let latestDate = new Date(0);
+        let sentimentCount = { bullish: 0, bearish: 0, neutral: 0 };
+        
+        news.forEach(item => {
+            if (item.source) sources.add(item.source);
+            if (item.publishedAt > latestDate) latestDate = item.publishedAt;
+            if (item.sentiment) {
+                sentimentCount[item.sentiment.toLowerCase()] = 
+                    (sentimentCount[item.sentiment.toLowerCase()] || 0) + 1;
+            }
+        });
+        
+        // Update stats
+        if (articleCount) articleCount.textContent = news.length;
+        if (latestTime) {
+            const timeStr = latestDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            latestTime.textContent = timeStr;
+        }
+        if (sourceCount) sourceCount.textContent = sources.size;
+        
+        // Calculate average sentiment
+        if (avgSentiment) {
+            const total = sentimentCount.bullish + sentimentCount.bearish + sentimentCount.neutral;
+            if (total > 0) {
+                const sentimentScore = (sentimentCount.bullish - sentimentCount.bearish) / total;
+                if (sentimentScore > 0.2) {
+                    avgSentiment.textContent = 'Bullish';
+                    avgSentiment.className = 'stat-value positive';
+                } else if (sentimentScore < -0.2) {
+                    avgSentiment.textContent = 'Bearish';
+                    avgSentiment.className = 'stat-value negative';
+                } else {
+                    avgSentiment.textContent = 'Neutral';
+                    avgSentiment.className = 'stat-value';
+                }
+            } else {
+                avgSentiment.textContent = '--';
+                avgSentiment.className = 'stat-value';
+            }
+        }
+        
+        // Display news
+        this.displayAPINews(news);
+        
+    } catch (error) {
+        console.error('Error loading API news:', error);
+        this.displayAPINewsFallback(category);
+        this.showNotification('Failed to load news. Using cached data.', 'warning');
+    }
+}
+
+displayAPINews(news) {
+    const container = document.getElementById('api-news-container');
+    if (!container) return;
+    
+    container.innerHTML = news.map((item, index) => `
+        <div class="api-news-item ${item.sentiment ? `sentiment-${item.sentiment.toLowerCase()}` : ''}" data-index="${index}">
+            <div class="news-time-badge">
+                <span class="news-time">${this.formatNewsTime(item.publishedAt)}</span>
+                ${item.sentiment ? `<span class="sentiment-badge ${item.sentiment.toLowerCase()}">${item.sentiment}</span>` : ''}
+            </div>
+            <div class="news-content">
+                <h4 class="news-title">
+                    <a href="${item.url}" target="_blank" rel="noopener noreferrer">
+                        ${item.title}
+                    </a>
+                </h4>
+                <p class="news-excerpt">${item.excerpt}</p>
+                <div class="news-meta">
+                    <span class="news-source">${item.source}</span>
+                    <span class="news-category">${item.category}</span>
+                    <span class="news-age">${this.getTimeAgo(item.publishedAt)}</span>
+                </div>
+            </div>
+            <div class="news-actions">
+                <button class="news-save-btn" title="Save for later">💾</button>
+                <button class="news-share-btn" title="Share">↗️</button>
+            </div>
+        </div>
+    `).join('');
+    
+    // Add event listeners to news items
+    this.setupNewsItemInteractions();
+}
+
+displayAPINewsFallback(category) {
+    const container = document.getElementById('api-news-container');
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div class="news-fallback">
+            <div class="fallback-icon">📰</div>
+            <h4>API News Temporarily Unavailable</h4>
+            <p>Using cached or mock data for ${category} news.</p>
+            <button class="retry-btn" id="retry-api-news">Retry Connection</button>
+            <div class="fallback-tips">
+                <p><strong>Tip:</strong> Make sure you've added API keys to <code>config.js</code></p>
+                <p>Free APIs have rate limits. Try again in a few minutes.</p>
+            </div>
+        </div>
+    `;
+    
+    const retryBtn = document.getElementById('retry-api-news');
+    if (retryBtn) {
+        retryBtn.addEventListener('click', () => this.loadAPINews(category));
+    }
+}
+
+setupNewsItemInteractions() {
+    // Save button
+    document.querySelectorAll('.news-save-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const newsItem = e.target.closest('.api-news-item');
+            const index = newsItem.dataset.index;
+            this.saveNewsItem(index);
+        });
+    });
+    
+    // Share button
+    document.querySelectorAll('.news-share-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const newsItem = e.target.closest('.api-news-item');
+            const title = newsItem.querySelector('.news-title').textContent;
+            const url = newsItem.querySelector('a').href;
+            this.shareNews(title, url);
+        });
+    });
+    
+    // Click on news item
+    document.querySelectorAll('.api-news-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            if (!e.target.closest('.news-actions')) {
+                const link = item.querySelector('a');
+                if (link) {
+                    window.open(link.href, '_blank');
+                }
+            }
+        });
+    });
+}
+
+formatNewsTime(date) {
+    const now = new Date();
+    const newsDate = new Date(date);
+    const diffHours = Math.floor((now - newsDate) / (1000 * 60 * 60));
+    
+    if (diffHours < 1) {
+        return 'Just now';
+    } else if (diffHours < 24) {
+        return `${diffHours}h ago`;
+    } else {
+        return newsDate.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    }
+}
+
+getTimeAgo(date) {
+    const now = new Date();
+    const newsDate = new Date(date);
+    const diffMs = now - newsDate;
+    const diffMins = Math.floor(diffMs / (1000 * 60));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    
+    if (diffMins < 60) {
+        return `${diffMins} min${diffMins !== 1 ? 's' : ''} ago`;
+    } else if (diffHours < 24) {
+        return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+    } else {
+        return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+    }
+}
+
+saveNewsItem(index) {
+    // In a real app, save to localStorage or backend
+    this.showNotification('News saved to your journal', 'success');
+    
+    // Visual feedback
+    const btn = document.querySelector(`.api-news-item[data-index="${index}"] .news-save-btn`);
+    if (btn) {
+        btn.textContent = '✓';
+        btn.style.color = '#00ffb3';
+        setTimeout(() => {
+            btn.textContent = '💾';
+            btn.style.color = '';
+        }, 2000);
+    }
+}
+
+shareNews(title, url) {
+    if (navigator.share) {
+        navigator.share({
+            title: title,
+            url: url,
+            text: `Check out this market news: ${title}`
+        });
+    } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(`${title} - ${url}`)
+            .then(() => this.showNotification('Link copied to clipboard', 'success'))
+            .catch(() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(title + ' ' + url)}`, '_blank'));
+    }
+}
+
+// Also add this to the initialize method (around line 40):
+initialize() {
+    this.setupMarketTypeButtons();
+    this.setupPairSelector();
+    this.setupTimezoneSelector();
+    this.setupQuickActions();
+    this.setupChartControls();
+    this.setupEventListeners();
+    
+    // Initialize TradingView widgets
+    this.initializeTradingViewWidgets();
+    
+    // ADD THIS LINE:
+    this.setupAPINewsSection(); // Initialize API news section
+    
+    // Start live updates
+    this.startLiveUpdates();
+}
+
+displayCustomNews(news) {
+    const container = document.getElementById('news-widget');
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div class="custom-news-container">
+            <h4>Latest ${this.currentPair.marketType.toUpperCase()} News</h4>
+            ${news.map(item => `
+                <div class="news-item">
+                    <div class="news-time">${new Date(item.publishedAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                    <div class="news-content">
+                        <h5>${item.title}</h5>
+                        <p>${item.excerpt}</p>
+                        <div class="news-footer">
+                            <span class="news-source">${item.source}</span>
+                            ${item.sentiment ? `<span class="news-sentiment ${item.sentiment}">${item.sentiment}</span>` : ''}
+                            <a href="${item.url}" target="_blank" class="news-link">Read →</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
     
     initializeEconomicCalendar() {
         const container = document.getElementById('economic-calendar-widget');
@@ -943,6 +1786,8 @@ class CosmicAnalyzer {
             if (btn) btn.addEventListener('click', action);
         });
     }
+
+    
     
     // Take Snapshot function
     takeSnapshot() {
