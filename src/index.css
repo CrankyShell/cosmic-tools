@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+@layer base {
+  body {
+    background-color: #0b0d17;
+    color: #e0e1dd;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Custom Scrollbar for the Cosmic Theme */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0b0d17;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #3b82f6; /* Updated to Cosmic Blue */
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2563eb; /* Darker Blue on hover */
+  }
+
+  /* Selection Color */
+  ::selection {
+    background-color: #3b82f6; /* Updated to Cosmic Blue */
+    color: #ffffff;
+  }
+}
+
+@layer components {
+  .cosmic-card {
+    @apply bg-cosmic-card border border-white/10 rounded-xl p-6 backdrop-blur-sm;
+  }
+  
+  .cosmic-input {
+    @apply bg-cosmic-bg border border-white/10 rounded-lg px-4 py-2 text-cosmic-text focus:outline-none focus:border-cosmic-accent focus:ring-1 focus:ring-cosmic-accent transition-all duration-300;
+  }
+
+  .cosmic-button {
+    @apply bg-cosmic-accent text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:shadow-neon transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0;
+  }
+  
+  .cosmic-nav-link {
+    @apply flex items-center space-x-2 px-4 py-3 rounded-lg transition-all duration-200 text-gray-400 hover:text-white hover:bg-white/5;
+  }
+  
+  .cosmic-nav-link.active {
+    @apply bg-cosmic-accent/10 text-cosmic-accent;
+  }
+
+  /* Widget Container Styles for embedded third-party widgets */
+  .widget-container {
+    @apply w-full h-full;
+  }
+
+  .widget-container iframe {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+  }
+
+  /* TradingView widget overrides */
+  .tradingview-widget-container {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .tradingview-widget-container__widget {
+    width: 100% !important;
+    height: calc(100% - 32px) !important;
+  }
+
+  .tradingview-widget-copyright {
+    @apply text-xs text-gray-500 py-1 px-2;
+  }
+
+  .tradingview-widget-copyright a {
+    @apply text-cosmic-accent hover:text-cosmic-accent/80;
+  }
+
+  /* FinancialJuice widget overrides */
+  [id*="financialjuice"] iframe {
+    width: 100% !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  /* Widget card wrapper */
+  .cosmic-widget-card {
+    @apply bg-cosmic-card border border-white/10 rounded-xl overflow-hidden flex flex-col;
+  }
+
+  .cosmic-widget-header {
+    @apply px-4 py-3 border-b border-white/10 flex-shrink-0;
+  }
+
+  .cosmic-widget-title {
+    @apply text-sm font-medium text-gray-400 uppercase tracking-wider;
+  }
+
+  .cosmic-widget-body {
+    @apply flex-1 relative;
+  }
+}
